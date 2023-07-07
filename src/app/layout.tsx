@@ -1,7 +1,6 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
 import { Sidebar } from '@/components/Sidebar/Sidebar'
-import favicon from './favicon.ico'
 
 const inter = Inter({ subsets: ['cyrillic'] })
 
