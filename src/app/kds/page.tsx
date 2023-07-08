@@ -3,7 +3,7 @@
 import { AddEntry } from "@/components/AddEntry";
 import { EventCalendar } from "@/components/EventCalendar";
 import { Metadata } from 'next'
-import { createContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import Entry from "@/types/entry";
 
 const CalendarContext = createContext<Entry[]>([])
@@ -71,6 +71,10 @@ export default function Kds() {
         "darkColor": "indigo",
         "userId": "3"
     }])
+
+    useEffect(() => {
+        setCalendarData(calendarData)
+    }, [calendarData])
   
   return (
     <>
@@ -82,9 +86,7 @@ export default function Kds() {
     {
         ifAdd && (
             <div className="p-6 lg:w-1/2 w-full mb-8 rounded-xl bg-gray-50 dark:bg-gray-800 shadow-sm shadow-gray-200/50 dark:shadow-black/50 max-w-full overflow-auto">
-                <CalendarContext.Provider value={calendarData}>
-                    <AddEntry CalendarContext={CalendarContext} />
-                </CalendarContext.Provider>
+                <AddEntry closeModal={setIfAdd} calendarData={calendarData} setCalendarData={setCalendarData} />
             </div>)
     }
 

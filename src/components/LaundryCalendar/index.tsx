@@ -1,13 +1,16 @@
-import React from "react";
+'use client';
+
+import React, { useState } from "react";
 import { FunctionComponent } from "react";
 import LaundryEntry from "@/types/laundryEntry";
 
 interface Props {
     calendarData: LaundryEntry[],
+    setCalendarData: Function,
     selectedDate: string
 }
 
-export const LaundryCalendar: FunctionComponent<Props> = ({calendarData, selectedDate}) => {
+export const LaundryCalendar: FunctionComponent<Props> = ({calendarData, setCalendarData, selectedDate}) => {
     const times= ['00:00 - 02:00',
         '02:40 - 04:40',
         '05:20 - 07:20',
@@ -18,23 +21,54 @@ export const LaundryCalendar: FunctionComponent<Props> = ({calendarData, selecte
         '18:40 - 20:40',
         '21:20 - 23:20'];
     
-    function deleteEntry(): undefined {
-        // console.log('func: deleteEntry');
+    function deleteEntry(id: string): undefined {
+        setCalendarData(calendarData.filter((entry) => entry.id !== id))
     }
 
-    function addEntry(obj: object, time: string): undefined {
-        // console.log('func: addEntry');
-        
-        // if (new Date(this.selectedDate.split('.').reverse().join('-') + ' ' + time.split(' - ')[0]) > new Date()) {
-        //     this.$emit('addEntry', obj)
-        // } else {
-        //     useToastStore().addToast({
-        //         type: "error",
-        //         message: "На это время нельзя записаться",
-        //         timeout: 4000
-        //     })
-        // }
+    function numberToTime(time: number) {
+        switch (time) {
+            case 1:
+                return "00:00 - 02:00"
+            case 2:
+                return "02:40 - 04:40"
+            case 3:
+                return "05:20 - 07:20"
+            case 4:
+                return "08:00 - 10:00"
+            case 5:
+                return "10:40 - 12:40"
+            case 6:
+                return "13:20 - 15:20"
+            case 7:
+                return "16:00 - 18:00"
+            case 8:
+                return "18:40 - 20:40"
+            case 9:
+                return "21:20 - 23:20"
+        }
     }
+
+    function addEntry(entry: {w: number, h: number}, time: string): undefined {
+        const newId = selectedDate + '_' + numberToTime(entry.w) + '_' + entry.h
+        const entriesByDay = calendarData.filter((entry) => entry.date === new Date(Date.now()+86400000*2).toJSON().slice(0, 10))
+        const arr = entriesByDay.map(x => x.id)
+        if (!(arr.find((i) => i === newId))) {
+            setCalendarData([...calendarData, {
+                id: newId,
+                userId: '1', // this.userStore.currentUser.id,
+                username: 'User Name', // this.$auth.user.given_name + ' ' + this.$auth.user.family_name,
+                time: entry.w,
+                wmn: entry.h,
+                status: "active",
+                date: selectedDate,
+            }])
+            console.log(calendarData)
+
+        } else {
+            alert("Такая запись уже существует")
+        }
+    }
+    
     return (
         <>
         <div className="bg-white dark:bg-gray-800 shadow-xl overflow-hidden w-fit">
@@ -53,12 +87,12 @@ export const LaundryCalendar: FunctionComponent<Props> = ({calendarData, selecte
                         <React.Fragment key={Number(index)}>
                             <div key={Number(index+1) + '_1'} className={`row-start-[${Number(index+2)}] col-start-[1] border-gray-100 dark:border-gray-200/5 border-r text-xs p-1.5 text-right text-gray-400 uppercase sticky left-0 bg-white dark:bg-gray-800 font-medium`}>
                                 {time}</div>
-                            <div onClick={addEntry({w: Number(index+1), h: 1}, time)} key={Number(index+2) + '_2'} className={`row-start-[${Number(index+2)}] col-start-[2] border-gray-100 dark:border-gray-200/5 border-b border-r cursor-pointer`}></div>
-                            <div onClick={addEntry({w: Number(index+1), h: 2}, time)} key={Number(index+2) + '_3'} className={`row-start-[${Number(index+2)}] col-start-[3] border-gray-100 dark:border-gray-200/5 border-b border-r cursor-pointer`}></div>
-                            <div onClick={addEntry({w: Number(index+1), h: 3}, time)} key={Number(index+2) + '_4'} className={`row-start-[${Number(index+2)}] col-start-[4] border-gray-100 dark:border-gray-200/5 border-b border-r cursor-pointer`}></div>
-                            <div onClick={addEntry({w: Number(index+1), h: 4}, time)} key={Number(index+2) + '_5'} className={`row-start-[${Number(index+2)}] col-start-[5] border-gray-100 dark:border-gray-200/5 border-b border-r cursor-pointer`}></div>
-                            <div onClick={addEntry({w: Number(index+1), h: 5}, time)} key={Number(index+2) + '_6'} className={`row-start-[${Number(index+2)}] col-start-[6] border-gray-100 dark:border-gray-200/5 border-b border-r cursor-pointer`}></div>
-                            <div onClick={addEntry({w: Number(index+1), h: 6}, time)} key={Number(index+2) + '_7'} className={`row-start-[${Number(index+2)}] col-start-[7] border-gray-100 dark:border-gray-200/5 border-b cursor-pointer`}></div>
+                            <div onClick={() => addEntry({w: Number(index+1), h: 1}, time)} key={Number(index+2) + '_2'} className={`row-start-[${Number(index+2)}] col-start-[2] border-gray-100 dark:border-gray-200/5 border-b border-r cursor-pointer`}></div>
+                            <div onClick={() => addEntry({w: Number(index+1), h: 2}, time)} key={Number(index+2) + '_3'} className={`row-start-[${Number(index+2)}] col-start-[3] border-gray-100 dark:border-gray-200/5 border-b border-r cursor-pointer`}></div>
+                            <div onClick={() => addEntry({w: Number(index+1), h: 3}, time)} key={Number(index+2) + '_4'} className={`row-start-[${Number(index+2)}] col-start-[4] border-gray-100 dark:border-gray-200/5 border-b border-r cursor-pointer`}></div>
+                            <div onClick={() => addEntry({w: Number(index+1), h: 4}, time)} key={Number(index+2) + '_5'} className={`row-start-[${Number(index+2)}] col-start-[5] border-gray-100 dark:border-gray-200/5 border-b border-r cursor-pointer`}></div>
+                            <div onClick={() => addEntry({w: Number(index+1), h: 5}, time)} key={Number(index+2) + '_6'} className={`row-start-[${Number(index+2)}] col-start-[6] border-gray-100 dark:border-gray-200/5 border-b border-r cursor-pointer`}></div>
+                            <div onClick={() => addEntry({w: Number(index+1), h: 6}, time)} key={Number(index+2) + '_7'} className={`row-start-[${Number(index+2)}] col-start-[7] border-gray-100 dark:border-gray-200/5 border-b cursor-pointer`}></div>
                         </React.Fragment>
                     ))
                 }
@@ -66,7 +100,7 @@ export const LaundryCalendar: FunctionComponent<Props> = ({calendarData, selecte
                 
                 {
                     calendarData.map((entry: LaundryEntry) => (
-                        <div onClick={deleteEntry} key={entry.id} className={`row-start-[${Number(entry.time + 1)}] col-start-[${Number(entry.wmn + 1)}] row-span-1 col-span-1 border rounded-lg m-1 p-1 flex flex-col ${entry.status === 'active' ? 'bg-blue-400/20 dark:bg-sky-600/50 border-blue-700/10 dark:border-sky-500 cursor-pointer' : 'bg-gray-400/20 dark:bg-gray-600/50 border-gray-700/10 dark:border-gray-500 cursor-not-allowed'}`}>
+                        <div onClick={() => deleteEntry(entry.id)} key={entry.id} className={`row-start-[${Number(entry.time + 1)}] col-start-[${Number(entry.wmn + 1)}] row-span-1 col-span-1 border rounded-lg m-1 p-1 flex flex-col ${entry.status === 'active' ? 'bg-blue-400/20 dark:bg-sky-600/50 border-blue-700/10 dark:border-sky-500 cursor-pointer' : 'bg-gray-400/20 dark:bg-gray-600/50 border-gray-700/10 dark:border-gray-500 cursor-not-allowed'}`}>
                             <span className="text-xs text-center my-auto font-medium text-blue-600 dark:text-sky-100">{entry.username}</span>
                         </div>
                     ))

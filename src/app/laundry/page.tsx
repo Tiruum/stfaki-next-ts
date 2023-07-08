@@ -1,10 +1,13 @@
+"use client";
+
 import { LaundryCalendar } from "@/components/LaundryCalendar"
 import { Metadata } from 'next'
 import LaundryEntry from "@/types/laundryEntry"
+import { useState } from "react"
  
 export const metadata: Metadata = {
   title: 'Прачечная',
-  description: 'ГСтиральная комната',
+  description: 'Стиральная комната',
 }
 
 export default function Laundry() {
@@ -38,7 +41,7 @@ export default function Laundry() {
       return nextDay.toLocaleDateString()
   }
   let selectedDate = new Date().toLocaleDateString()
-  const calendarData = [] as LaundryEntry[]
+  let [calendarData, setCalendarData] = useState<LaundryEntry[]>([])
   return (
     <>
       <div className="mb-8">
@@ -56,7 +59,7 @@ export default function Laundry() {
           </select>
       </div>
       <div className="rounded-xl bg-gray-50 dark:bg-gray-800 shadow-sm shadow-gray-200/50 dark:shadow-black/50 overflow-auto">
-          <LaundryCalendar selectedDate={selectedDate} calendarData={calendarData} />
+          <LaundryCalendar selectedDate={selectedDate} calendarData={calendarData} setCalendarData={setCalendarData} />
       </div>
     </>
   )
