@@ -1,5 +1,3 @@
-import Image from 'next/image'
-import { Sidebar } from '@/components/Sidebar/Sidebar'
 import { Metadata } from 'next'
  
 export const metadata: Metadata = {

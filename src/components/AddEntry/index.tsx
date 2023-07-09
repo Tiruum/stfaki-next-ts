@@ -1,6 +1,6 @@
 'use client'
 
-import { FunctionComponent, useContext } from "react";
+import { FunctionComponent } from "react";
 import Entry from "@/types/entry";
 import validateEntryForEntryCalendar from "@/helpers/validateEntryForEntryCalendar";
 
