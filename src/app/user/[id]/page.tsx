@@ -33,7 +33,7 @@ export default function Page({params}: {params: {id: number}}) {
         <div className="rounded-xl bg-gray-50 dark:bg-gray-800 shadow-sm shadow-gray-200/50 dark:shadow-black/50 max-w-full overflow-auto p-6">
             <div className="rounded-xl bg-gradient-to-tr from-gray-700 to-gray-600 border-2 border-gray-600 text-white px-8 py-6 w-fit h-fit flex-none">
                 <div className="flex gap-5">
-                    <img className="w-32 h-32 aspect-square bg-gray-500 rounded-full border-2 border-gray-500" src="https://sun136-1.userapi.com/s/v1/ig2/1uRLm7bEUxKrfGNn1bHtOi_yKqFoFXBq7tpsy2VPxXzGGg5Eu2SNqhJxbTUKQSUHNCn6bSz422UljV0ak22X1i2H.jpg?size=200x200&quality=95&crop=189,264,1235,1235&ava=1" />
+                    <div className="w-32 h-32 aspect-square bg-gray-500 rounded-full border-2 border-gray-500"></div>
                     <div className="flex flex-col">
                         <p className="font-semibold text-2xl">{`${user?.name} ${user?.surname}`}</p>
                         <span>id: {params.id}</span>
