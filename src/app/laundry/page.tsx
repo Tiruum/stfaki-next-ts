@@ -5,10 +5,10 @@ import { Metadata } from 'next'
 import LaundryEntry from "@/types/laundryEntry"
 import { useState } from "react"
  
-export const metadata: Metadata = {
-  title: 'Прачечная',
-  description: 'Стиральная комната',
-}
+// export const metadata: Metadata = {
+//   title: 'Прачечная',
+//   description: 'Стиральная комната',
+// }
 
 export default function Laundry() {
   function numberToTime(time: number) {

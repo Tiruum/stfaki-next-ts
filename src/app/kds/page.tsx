@@ -8,10 +8,10 @@ import Entry from "@/types/entry";
 
 const CalendarContext = createContext<Entry[]>([])
  
-export const metadata: Metadata = {
-  title: 'Комната для собраний',
-  description: 'Комната для собраний'
-}
+// export const metadata: Metadata = {
+//   title: 'Комната для собраний',
+//   description: 'Комната для собраний'
+// }
 
 // async function getData() {
 //     const res = await fetch('http://localhost:3000/api/entries', {

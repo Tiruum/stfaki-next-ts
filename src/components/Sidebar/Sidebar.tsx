@@ -2,15 +2,26 @@
 
 import Link from "next/link";
 import { usePathname } from 'next/navigation'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-export function Sidebar({ ifShow }: {ifShow: Boolean}) {
+export function Sidebar() {
     const pathname = usePathname()
     let [loggedIn, setLoggedIn] = useState(false)
+    let [ifShow, setIfShow] = useState(false)
+    function handleResize() {
+        if ((window.innerWidth <= 640) && (ifShow == true)) {
+        setIfShow(false)
+        console.log(1);
+        }
+    }
+    useEffect(() => {
+        window.addEventListener('resize', handleResize)
+    })
     // const activeStyle = "bg-gray-200 dark:bg-gray-700 text-gray-50 dark:text-white"
     // const merged = "flex items-center p-2 text-base font-normal rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-50 dark:text-white"
     // const defaultStyle = "flex items-center p-2 text-base font-normal rounded-lg text-gray-900 dark:text-gray-50 hover:bg-gray-200 dark:hover:bg-gray-700"
     return (
+        <>
         <aside className={`lg:w-72 sm:w-16 ${ifShow ? 'w-full' : 'w-0'} h-screen fixed transition-all overflow-auto z-[21]`} aria-label="Sidebar">
         <div className="overflow-y-auto py-4 px-3 bg-white dark:bg-gray-800 h-full left-0 shadow-sm backdrop-filter backdrop-blur-lg bg-opacity-40 dark:backdrop-filter dark:backdrop-blur-lg dark:bg-opacity-40">
             <ul className="space-y-2">
@@ -179,5 +190,27 @@ export function Sidebar({ ifShow }: {ifShow: Boolean}) {
             {/* prealpha(0)-alpha(1)-beta(2)-releasecandidate(3)-release(4).major-changes.minor-changes.amount-of-fixed-bugs */}
         </div>
     </aside>
+    {
+        !ifShow ? 
+        <div onClick={() => setIfShow(true)} className="sm:hidden fixed text-white bg-gray-800 w-10 h-10 top-3 left-3 rounded-full flex items-center justify-center text-3xl font-semibold cursor-pointer opacity-90 z-[22]"><Plus /></div> :
+        <div onClick={() => setIfShow(false)} className='sm:hidden fixed text-white bg-gray-800 w-10 h-10 top-3 right-3 rounded-full flex items-center justify-center text-3xl font-semibold cursor-pointer opacity-90 z-[22]'><Cross /></div>
+    }
+    </>
+    )
+}
+
+function Cross() {
+    return (
+        <svg viewBox="0 0 512.021 512.021" width="16" height="16">
+        <path fill='#9ca3af' d="M301.258,256.01L502.645,54.645c12.501-12.501,12.501-32.769,0-45.269c-12.501-12.501-32.769-12.501-45.269,0l0,0   L256.01,210.762L54.645,9.376c-12.501-12.501-32.769-12.501-45.269,0s-12.501,32.769,0,45.269L210.762,256.01L9.376,457.376   c-12.501,12.501-12.501,32.769,0,45.269s32.769,12.501,45.269,0L256.01,301.258l201.365,201.387   c12.501,12.501,32.769,12.501,45.269,0c12.501-12.501,12.501-32.769,0-45.269L301.258,256.01z"/>
+        </svg>
+    )
+}
+
+function Plus() {
+    return (
+        <svg viewBox="0 0 512 512" width="20" height="20">
+        <path fill='#9ca3af' d="M480,224H288V32c0-17.673-14.327-32-32-32s-32,14.327-32,32v192H32c-17.673,0-32,14.327-32,32s14.327,32,32,32h192v192   c0,17.673,14.327,32,32,32s32-14.327,32-32V288h192c17.673,0,32-14.327,32-32S497.673,224,480,224z"/>
+        </svg>
     )
 }
