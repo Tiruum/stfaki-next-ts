@@ -1,6 +1,7 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
 import { Sidebar } from '@/components/Sidebar/Sidebar'
+import { StoreProvider } from '@/redux/StoreProvider'
 
 const inter = Inter({ subsets: ['cyrillic'] })
 
@@ -25,6 +26,7 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body className={inter.className}>
+      <StoreProvider>
         <div className="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white h-full min-h-screen relative overflow-auto">
           {/* <ToastList /> */}
           <div className="flex md:gap-4 gap-0 transition-all">
@@ -36,6 +38,7 @@ export default function RootLayout({
             </div>
           </div>
         </div>
+        </StoreProvider>
       </body>
     </html>
   )
