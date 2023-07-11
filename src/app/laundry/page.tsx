@@ -4,6 +4,10 @@ import { LaundryCalendar } from "@/components/LaundryCalendar"
 import { Metadata } from 'next'
 import LaundryEntry from "@/types/laundryEntry"
 import { useState } from "react"
+import { useDispatch, useSelector } from "react-redux";
+import { selectSelectedDateModule } from "@/redux/features/selectDate/selector";
+import { selectedDateSlice } from "@/redux/features/selectDate";
+import { useGetLaundryEntriesQuery } from "@/redux/services/laundryEntriesApi";
  
 // export const metadata: Metadata = {
 //   title: 'Прачечная',
@@ -40,8 +44,12 @@ export default function Laundry() {
       nextDay.setDate(today.getDate() + Number(skip))
       return nextDay.toLocaleDateString()
   }
-  let selectedDate = new Date().toLocaleDateString()
+//   let selectedDate = new Date().toLocaleDateString()
   let [calendarData, setCalendarData] = useState<LaundryEntry[]>([])
+  let selectedDate = useSelector((state: {selectedDate: string}) => selectSelectedDateModule(state))
+  const dispatch = useDispatch()
+  const {data, isLoading, error} = useGetLaundryEntriesQuery()
+  console.log(data)
   return (
     <>
       <div className="mb-8">
@@ -49,9 +57,7 @@ export default function Laundry() {
           <p className="text-base mt-2">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
       </div>
       <div className="rounded-xl px-6 py-1 w-fit mx-auto mb-2 bg-white dark:bg-gray-700 shadow-sm shadow-gray-200/50 dark:shadow-black/50 overflow-auto">
-          <select className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-3 py-1 focus-visible:outline-none">
-              {[0,1,2,3,4,5,6,7].map((index) => (<option v-for="index of 8" key={index}>{getDay(index-2)}</option>))}
-          </select>
+          <input onChange={(e) => dispatch(selectedDateSlice.actions.selectDate(e.target.value))} className="bg-white dark:bg-gray-700 text-gray-900 dark:text-white px-3 py-1 focus-visible:outline-none" type="date" defaultValue={selectedDate} />
       </div>
       <div className="rounded-xl bg-gray-50 dark:bg-gray-800 shadow-sm shadow-gray-200/50 dark:shadow-black/50 overflow-auto">
           <LaundryCalendar selectedDate={selectedDate} calendarData={calendarData} setCalendarData={setCalendarData} />
