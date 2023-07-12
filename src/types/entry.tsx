@@ -5,6 +5,7 @@ export default interface Entry {
     description: string,
     date: string,
     color: string,
+    darkColor: string,
     type: string,
     userId: number
 }

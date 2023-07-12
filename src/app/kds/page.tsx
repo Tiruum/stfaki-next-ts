@@ -42,33 +42,36 @@ export default function Kds() {
     let [ifAdd, setIfAdd] = useState(false)
 
     let [calendarData, setCalendarData] = useState<Entry[]>([{
-        "id": Date.now() + Math.ceil(Math.random()*1000000),
+        "id": 1,
         "time": ["00:00", "06:00"],
         "title": "Просмотр фильма 🎥",
         "description": "Description",
         "type": "one-time",
         "date": new Date(Date.now()+86400000*2).toJSON().slice(0, 10),
         "color": "blue",
+        "darkColor": "sky",
         "userId": 2
     },
     {
-        "id": Date.now() + Math.ceil(Math.random()*1000000),
+        "id": 2,
         "time": ["04:00", "08:00"],
         "title": "Ботаем",
         "description": "Description",
         "type": "one-time",
         "date": new Date(Date.now()+86400000*3).toJSON().slice(0, 10),
         "color": "purple",
+        "darkColor": "fuchsia",
         "userId": 1
     },
     {
-        "id": Date.now() + Math.ceil(Math.random()*1000000),
+        "id": 3,
         "time": ["03:00", "07:00"],
         "title": "Прогаем сайт",
         "description": "Description",
         "type": "one-time",
         "date": new Date(Date.now()+86400000*4).toJSON().slice(0, 10),
         "color": "pink",
+        "darkColor": "indigo",
         "userId": 3
     }])
 
