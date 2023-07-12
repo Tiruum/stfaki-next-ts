@@ -1,5 +1,9 @@
 "use client";
 
+import datetimeDiff from "@/helpers/datetimeDiff";
+import dotDateToDash from "@/helpers/dotDateToDash";
+import { laundryEntriesApi } from "@/redux/services/laundryEntriesApi";
+import LaundryEntry from "@/types/laundryEntry";
 import Link from "next/link";
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from "react";
@@ -17,6 +21,16 @@ export function Sidebar() {
     useEffect(() => {
         window.addEventListener('resize', handleResize)
     })
+
+    // Код для того, чтобы получить количество записей пользователя в стиралку
+    // let selectedDate = useSelector((state: {selectedDate: string}) => selectSelectedDateModule(state))
+    const todayDate = dotDateToDash(new Date().toLocaleDateString("eu-RU", {timeZone: "Europe/Moscow"}))
+    const {data, isLoading, error} = laundryEntriesApi.useGetLaundryEntriesByDateQuery(todayDate)
+    let laundryEntriesQuantity = null
+    if (!isLoading) {
+        laundryEntriesQuantity = data.filter((entry: LaundryEntry) => (entry.userInfo.username === 'Никита Буланов' && datetimeDiff(entry.date + 'T' + entry.time.slice(0, 5)) > 0)).length
+    }
+
     // const activeStyle = "bg-gray-200 dark:bg-gray-700 text-gray-50 dark:text-white"
     // const merged = "flex items-center p-2 text-base font-normal rounded-lg bg-gray-200 dark:bg-gray-700 text-gray-50 dark:text-white"
     // const defaultStyle = "flex items-center p-2 text-base font-normal rounded-lg text-gray-900 dark:text-gray-50 hover:bg-gray-200 dark:hover:bg-gray-700"
@@ -76,10 +90,11 @@ export function Sidebar() {
                                 transform="translate(1.71 0)" />
                         </svg>
                         <span className={`ml-3 ${ifShow ? 'block' : 'hidden'} lg:block`}>Прачечная</span>
-                        <>
-                            <span v-if="useLaundryStore().getEntryAmount($auth.user.given_name + ' ' + $auth.user.family_name) != 0" className="inline-flex justify-center items-center w-3 h-3 p-2 text-xs lg:p-3 lg:ml-3 lg:text-sm font-medium text-green-600 bg-green-200 rounded-full dark:bg-green-800 dark:text-green-200">{1}</span>
-                        </>
-                    </Link>
+                        {
+                            !!laundryEntriesQuantity && !isLoading && !error &&
+                            <span className="inline-flex justify-center items-center w-3 h-3 p-2 text-xs lg:p-3 lg:ml-3 lg:text-sm font-medium text-green-600 bg-green-200 rounded-full dark:bg-green-800 dark:text-green-200" title="Активных записей на сегодня">{laundryEntriesQuantity}</span>
+                        }
+                        </Link>
                 </li>
                 <li>
                     <Link href="/club" className={

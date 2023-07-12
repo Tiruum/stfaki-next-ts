@@ -14,13 +14,13 @@ export const AddEntry: FunctionComponent<Props> = ({closeModal, calendarData, se
 
     let form: Entry = {
         id: 0,
+        description: '',
+        type: '',
         title: '',
         date: '',
         time: ['', ''],
         color: 'blue',
-        userId: '',
-        darkColor: 'indigo',
-        username: ''
+        userId: 0,
     }
 
     const pushEvent = () => {
@@ -29,7 +29,7 @@ export const AddEntry: FunctionComponent<Props> = ({closeModal, calendarData, se
         form.time[0] = (document.querySelector('#start_time') as HTMLInputElement)?.value
         form.time[1] = (document.querySelector('#end_time') as HTMLInputElement)?.value
         form.color = (document.querySelector('#color') as HTMLInputElement).value
-        form.darkColor = (document.querySelector('#color') as HTMLInputElement).value
+        form.type = (document.querySelector('#type') as HTMLInputElement).value
         const output = validateEntryForEntryCalendar(calendarData, form)
         output === true ? setCalendarData([...calendarData, {
                 ...form,
@@ -76,9 +76,9 @@ export const AddEntry: FunctionComponent<Props> = ({closeModal, calendarData, se
             <h2 className="font-semibold text-lg mt-4">Периодичность и цвет</h2>
             <div className="flex flex-row gap-4 justify-evenly w-full">
                 <div className="w-full">
-                    <label className="text-xs text-gray-500" html-for="repeat">Периодичность</label><br />
-                    <select className="inpt" disabled name="type" id="repeat" required >
-                        <option value="no-repeat">Не повторять</option>
+                    <label className="text-xs text-gray-500" html-for="type">Периодичность</label><br />
+                    <select className="inpt" disabled name="type" id="type" required >
+                        <option value="one-time">Единоразово</option>
                         <option value="daily">Ежедневно</option>
                         <option value="weekly">Еженедельно</option>
                         <option value="monthly">Ежемесячно</option>

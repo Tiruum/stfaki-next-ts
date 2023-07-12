@@ -3,14 +3,16 @@
 import React, { useState } from "react";
 import { FunctionComponent } from "react";
 import LaundryEntry from "@/types/laundryEntry";
+import datetimeDiff from "@/helpers/datetimeDiff";
+import timeToNumber from "@/helpers/timeToNumber";
 
 interface Props {
     calendarData: LaundryEntry[],
-    setCalendarData: Function,
-    selectedDate: string
+    addEntry: Function,
+    deleteEntry: Function
 }
 
-export const LaundryCalendar: FunctionComponent<Props> = ({calendarData, setCalendarData, selectedDate}) => {
+export const LaundryCalendar: FunctionComponent<Props> = ({calendarData, addEntry, deleteEntry}) => {
     const times= ['00:00 - 02:00',
         '02:40 - 04:40',
         '05:20 - 07:20',
@@ -21,53 +23,9 @@ export const LaundryCalendar: FunctionComponent<Props> = ({calendarData, setCale
         '18:40 - 20:40',
         '21:20 - 23:20'];
     
-    function deleteEntry(id: string): undefined {
-        setCalendarData(calendarData.filter((entry) => entry.id !== id))
-    }
-
-    function numberToTime(time: number) {
-        switch (time) {
-            case 1:
-                return "00:00 - 02:00"
-            case 2:
-                return "02:40 - 04:40"
-            case 3:
-                return "05:20 - 07:20"
-            case 4:
-                return "08:00 - 10:00"
-            case 5:
-                return "10:40 - 12:40"
-            case 6:
-                return "13:20 - 15:20"
-            case 7:
-                return "16:00 - 18:00"
-            case 8:
-                return "18:40 - 20:40"
-            case 9:
-                return "21:20 - 23:20"
-        }
-    }
-
-    function addEntry(entry: {w: number, h: number}, time: string): undefined {
-        const newId = selectedDate + '_' + numberToTime(entry.w) + '_' + entry.h
-        const entriesByDay = calendarData.filter((entry) => entry.date === new Date(Date.now()+86400000*2).toJSON().slice(0, 10))
-        const arr = entriesByDay.map(x => x.id)
-        if (!(arr.find((i) => i === newId))) {
-            setCalendarData([...calendarData, {
-                id: newId,
-                userId: '1', // this.userStore.currentUser.id,
-                username: 'User Name', // this.$auth.user.given_name + ' ' + this.$auth.user.family_name,
-                time: entry.w,
-                wmn: entry.h,
-                status: "active",
-                date: selectedDate,
-            }])
-            console.log(calendarData)
-
-        } else {
-            alert("Такая запись уже существует")
-        }
-    }
+    // function deleteEntry(id: number): undefined {
+    //     setCalendarData(calendarData.filter((entry) => entry.id !== id))
+    // }
     
     return (
         <>
@@ -96,12 +54,13 @@ export const LaundryCalendar: FunctionComponent<Props> = ({calendarData, setCale
                         </React.Fragment>
                     ))
                 }
-
                 
                 {
+                    // ${entry.status === 'active' ? 'bg-blue-400/20 dark:bg-sky-600/50 border-blue-700/10 dark:border-sky-500 cursor-pointer' : 'bg-gray-400/20 dark:bg-gray-600/50 border-gray-700/10 dark:border-gray-500 cursor-not-allowed'}
                     calendarData.map((entry: LaundryEntry) => (
-                        <div onClick={() => deleteEntry(entry.id)} key={entry.id} className={`row-start-[${Number(entry.time + 1)}] col-start-[${Number(entry.wmn + 1)}] row-span-1 col-span-1 border rounded-lg m-1 p-1 flex flex-col ${entry.status === 'active' ? 'bg-blue-400/20 dark:bg-sky-600/50 border-blue-700/10 dark:border-sky-500 cursor-pointer' : 'bg-gray-400/20 dark:bg-gray-600/50 border-gray-700/10 dark:border-gray-500 cursor-not-allowed'}`}>
-                            <span className="text-xs text-center my-auto font-medium text-blue-600 dark:text-sky-100">{entry.username}</span>
+                        entry &&
+                        <div key={entry.id} onClick={() => deleteEntry(entry)} className={`row-start-[${ !!entry && typeof entry.time === 'string' && (Number(timeToNumber(entry.time) + 1))}] col-start-[${Number(entry.wmInfo.value + 1)}] row-span-1 col-span-1 border rounded-lg m-1 p-1 flex flex-col ${datetimeDiff(entry.date + 'T' + entry.time.slice(0, 5)) > 0 ? 'bg-blue-400/20 dark:bg-sky-600/50 border-blue-700/10 dark:border-sky-500 cursor-pointer' : 'bg-gray-400/20 dark:bg-gray-600/50 border-gray-700/10 dark:border-gray-500 cursor-not-allowed'}`}>
+                            <span className="text-xs text-center my-auto font-medium text-blue-600 dark:text-sky-100">{entry.userInfo.username}</span>
                         </div>
                     ))
                 }
