@@ -45,31 +45,31 @@ export default function Kds() {
         "id": Date.now() + Math.ceil(Math.random()*1000000),
         "time": ["00:00", "06:00"],
         "title": "Просмотр фильма 🎥",
-        "username": "Никита Буланов",
+        "description": "Description",
+        "type": "one-time",
         "date": new Date(Date.now()+86400000*2).toJSON().slice(0, 10),
         "color": "blue",
-        "darkColor": "sky",
-        "userId": "2"
+        "userId": 2
     },
     {
         "id": Date.now() + Math.ceil(Math.random()*1000000),
         "time": ["04:00", "08:00"],
         "title": "Ботаем",
-        "username": "Тимур Селин",
+        "description": "Description",
+        "type": "one-time",
         "date": new Date(Date.now()+86400000*3).toJSON().slice(0, 10),
         "color": "purple",
-        "darkColor": "fuchsia",
-        "userId": "1"
+        "userId": 1
     },
     {
         "id": Date.now() + Math.ceil(Math.random()*1000000),
         "time": ["03:00", "07:00"],
         "title": "Прогаем сайт",
-        "username": "Рената Костолина",
+        "description": "Description",
+        "type": "one-time",
         "date": new Date(Date.now()+86400000*4).toJSON().slice(0, 10),
         "color": "pink",
-        "darkColor": "indigo",
-        "userId": "3"
+        "userId": 3
     }])
 
     useEffect(() => {
