@@ -20,6 +20,7 @@ export const AddEntry: FunctionComponent<Props> = ({closeModal, calendarData, se
         date: '',
         time: ['', ''],
         color: 'blue',
+        darkColor: 'sky',
         userId: 0,
     }
 
