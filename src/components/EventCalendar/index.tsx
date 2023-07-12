@@ -277,7 +277,7 @@ export const EventCalendar: FunctionComponent<Props> = ({calendarData}) => {
                     <div key={entry.id} className={`row-start-[${Number(Number(entry.time[0].slice(0, 2))+2)}] col-start-[${Number( Math.round(Math.abs(new Date(new Date().toDateString()).getTime()-new Date(entry.date).getTime())/(1000*60*60*24))+2 )}] row-span-${Number(Number(entry.time[1].slice(0, 2)) - Number(entry.time[0].slice(0, 2)))} bg-${entry.color}-400/20 dark:bg-${entry.darkColor}-600/50 border border-${entry.color}-700/10 dark:border-${entry.darkColor}-500 rounded-lg m-1 p-1 flex flex-col transition-all cursor-pointer overflow-auto`}>
                         <span className={`text-xs text-${entry.color}-600 dark:text-${entry.darkColor}-100`}>{entry.time[0]} - {entry.time[1]}</span>
                         <span className={`text-xs font-medium text-${entry.color}-600 dark:text-${entry.darkColor}-100`}>{entry.title}</span>
-                        <span className={`text-xs text-${entry.color}-600 dark:text-${entry.darkColor}-100`}>{entry.username}</span>
+                        <span className={`text-xs text-${entry.color}-600 dark:text-${entry.darkColor}-100`}>{entry.userInfo.username}</span>
                     </div>
                 ))
             }

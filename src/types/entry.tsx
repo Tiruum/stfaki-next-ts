@@ -1,3 +1,5 @@
+import User from "./user"
+
 export default interface Entry {
     id: number,
     time: string[],
@@ -7,5 +9,6 @@ export default interface Entry {
     color: string,
     darkColor: string,
     type: string,
-    userId: number
+    userId: number,
+    userInfo: User
 }

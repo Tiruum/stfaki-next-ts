@@ -50,7 +50,16 @@ export default function Kds() {
         "date": new Date(Date.now()+86400000*2).toJSON().slice(0, 10),
         "color": "blue",
         "darkColor": "sky",
-        "userId": 2
+        "userId": 2,
+        userInfo: {
+            id: 1,
+            username: "Timur Selin",
+            email: "selin.ta@phystech.edu",
+            password: "123",
+            banned: false,
+            banReason: null,
+            balance: 1000
+        }
     },
     {
         "id": 2,
@@ -61,7 +70,16 @@ export default function Kds() {
         "date": new Date(Date.now()+86400000*3).toJSON().slice(0, 10),
         "color": "purple",
         "darkColor": "fuchsia",
-        "userId": 1
+        "userId": 1,
+        userInfo: {
+            id: 1,
+            username: "Timur Selin",
+            email: "selin.ta@phystech.edu",
+            password: "123",
+            banned: false,
+            banReason: null,
+            balance: 1000
+        }
     },
     {
         "id": 3,
@@ -72,7 +90,16 @@ export default function Kds() {
         "date": new Date(Date.now()+86400000*4).toJSON().slice(0, 10),
         "color": "pink",
         "darkColor": "indigo",
-        "userId": 3
+        "userId": 3,
+        userInfo: {
+            id: 1,
+            username: "Timur Selin",
+            email: "selin.ta@phystech.edu",
+            password: "123",
+            banned: false,
+            banReason: null,
+            balance: 1000
+        }
     }])
 
     useEffect(() => {
