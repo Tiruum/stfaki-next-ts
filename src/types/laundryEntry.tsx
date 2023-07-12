@@ -10,3 +10,11 @@ export default interface LaundryEntry {
     wmInfo: Wm,
     userInfo: User
 }
+
+export interface CreateLaundryEntry {
+    userId: number,
+    time: string,
+    wmValue: number,
+    status: string,
+    date: string,
+}
