@@ -3,108 +3,50 @@
 import { AddEntry } from "@/components/AddEntry";
 import { EventCalendar } from "@/components/EventCalendar";
 import { Metadata } from 'next'
-import { createContext, useContext, useEffect, useState } from "react";
-import Entry from "@/types/entry";
-
-const CalendarContext = createContext<Entry[]>([])
+import { createContext, useEffect, useState } from "react";
+import Entry, { CreateEntry } from "@/types/entry";
+import { entriesApi } from "@/redux/services/entriesApi";
+import LoadingEventGrid from "@/components/EventCalendar/LoadingEventCalendar";
+import { ErrorAlert } from "@/components/ErrorAlert";
+import { dateIntervalFromToday } from "@/helpers/dateIntervalFromToday";
  
 // export const metadata: Metadata = {
 //   title: 'Комната для собраний',
 //   description: 'Комната для собраний'
 // }
 
-// async function getData() {
-//     const res = await fetch('http://localhost:3000/api/entries', {
-//         method: "get",
-//         headers: {
-//             // 'Accept': 'application/json',
-//             // 'Content-Type': 'application/json',
-//             'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InNlbGluLnRhQHBoeXN0ZWNoLmVkdSIsImlkIjozLCJyb2xlcyI6W3siaWQiOjIsInZhbHVlIjoidXNlciIsImRlc2NyaXB0aW9uIjoi0J_QvtC70YzQt9C-0LLQsNGC0LXQu9GMIiwiY3JlYXRlZEF0IjoiMjAyMy0wMi0xOFQyMDowNzo0NC44NDNaIiwidXBkYXRlZEF0IjoiMjAyMy0wMi0xOFQyMDowNzo0NC44NDNaIiwiVXNlclJvbGVzIjp7ImlkIjoyLCJyb2xlSWQiOjIsInVzZXJJZCI6M319LHsiaWQiOjEsInZhbHVlIjoiYWRtaW4iLCJkZXNjcmlwdGlvbiI6ItCQ0LTQvNC40L3QuNGB0YLRgNCw0YLQvtGAIiwiY3JlYXRlZEF0IjoiMjAyMy0wMi0xN1QyMjo1MDo1Mi4yNjRaIiwidXBkYXRlZEF0IjoiMjAyMy0wMi0xOVQxNzoxNDowMi41NDlaIiwiVXNlclJvbGVzIjp7ImlkIjozLCJyb2xlSWQiOjEsInVzZXJJZCI6M319XSwiaWF0IjoxNjg4NzY5OTI2LCJleHAiOjE2ODg4NTYzMjZ9.Kh1lz6lOvvpXHZGe2w-Nq5SXG2-89j8uNYQtUkVPCuk'
-//         },
-//         // body: JSON.stringify({
-//         //     email: "selin.ta@phystech.edu",
-//         //     password: "Selin2002"
-//         // })
-//     }).then(
-//         (res) => (res.json())
-//     ).then(
-//         (data) => {
-//             console.log(data)
-//         }
-//     )
-// }
-
-// getData()
-
-
 export default function Kds() {
+
+    const ROOM_NAME = 'kds'
 
     let [ifAdd, setIfAdd] = useState(false)
 
-    let [calendarData, setCalendarData] = useState<Entry[]>([{
-        "id": 1,
-        "time": ["00:00", "06:00"],
-        "title": "Просмотр фильма 🎥",
-        "description": "Description",
-        "type": "one-time",
-        "date": new Date(Date.now()+86400000*2).toJSON().slice(0, 10),
-        "color": "blue",
-        "darkColor": "sky",
-        "userId": 2,
-        userInfo: {
-            id: 1,
-            username: "Timur Selin",
-            email: "selin.ta@phystech.edu",
-            password: "123",
-            banned: false,
-            banReason: null,
-            balance: 1000
-        }
-    },
-    {
-        "id": 2,
-        "time": ["04:00", "08:00"],
-        "title": "Ботаем",
-        "description": "Description",
-        "type": "one-time",
-        "date": new Date(Date.now()+86400000*3).toJSON().slice(0, 10),
-        "color": "purple",
-        "darkColor": "fuchsia",
-        "userId": 1,
-        userInfo: {
-            id: 1,
-            username: "Timur Selin",
-            email: "selin.ta@phystech.edu",
-            password: "123",
-            banned: false,
-            banReason: null,
-            balance: 1000
-        }
-    },
-    {
-        "id": 3,
-        "time": ["03:00", "07:00"],
-        "title": "Прогаем сайт",
-        "description": "Description",
-        "type": "one-time",
-        "date": new Date(Date.now()+86400000*4).toJSON().slice(0, 10),
-        "color": "pink",
-        "darkColor": "indigo",
-        "userId": 3,
-        userInfo: {
-            id: 1,
-            username: "Timur Selin",
-            email: "selin.ta@phystech.edu",
-            password: "123",
-            banned: false,
-            banReason: null,
-            balance: 1000
-        }
-    }])
+    const addCalendarData = async (entry: CreateEntry): Promise<void> => {
+        console.log(entry)
+        await addEntry({
+            userId: 6,
+            roomValue: ROOM_NAME,
+            title: entry.title,
+            description: entry.description,
+            from: entry.from,
+            to: entry.to,
+            color: entry.color,
+            type: entry.type
+        })
+    }
 
-    useEffect(() => {
-        setCalendarData(calendarData)
-    }, [calendarData])
+    const deleteCalendarData = async (id: number): Promise<void> => {
+        await deleteEntry(id)
+    }
+
+    const [leftDate, setLeftDate] = useState(0)
+    const [rightDate, setRightDate] = useState(6)
+    const dateSpan = dateIntervalFromToday(leftDate, rightDate, false)
+    console.log(dateSpan);
+    
+    const {data: calendarData, isLoading, error, isSuccess} = entriesApi.useGetRoomEntriesQuery({roomName: ROOM_NAME, fromDate: dateSpan.left, toDate: dateSpan.right})
+    const [addEntry, {}] = entriesApi.useAddEntryToRoomMutation()
+    const [deleteEntry, {}] = entriesApi.useDeleteEntryFromRoomMutation()
   
   return (
     <>
@@ -114,14 +56,21 @@ export default function Kds() {
         <button className="px-3 py-1 mt-2 border border-gray-50 rounded-md hover:opacity-70 transition-opacity" onClick={() => setIfAdd(!ifAdd)}>Записаться</button>
     </div>
     {
-        ifAdd && (
+        ifAdd && calendarData && (
             <div className="p-6 lg:w-1/2 w-full mb-8 rounded-xl bg-gray-50 dark:bg-gray-800 shadow-sm shadow-gray-200/50 dark:shadow-black/50 max-w-full overflow-auto">
-                <AddEntry closeModal={setIfAdd} calendarData={calendarData} setCalendarData={setCalendarData} />
+                <AddEntry closeModal={setIfAdd} calendarData={calendarData} setCalendarData={addCalendarData} />
             </div>)
     }
 
+    <div className="flex space-x-3 mb-3 justify-center">
+        <button onClick={() => {setLeftDate(leftDate+7); setRightDate(rightDate-7)}} className="rounded-lg bg-gray-700 px-4 py-2">Назад</button>
+        <button onClick={() => {setLeftDate(leftDate-7); setRightDate(rightDate+7)}} className="rounded-lg bg-gray-700 px-4 py-2">Вперед</button>
+    </div>
+
     <div className="rounded-xl bg-gray-50 dark:bg-gray-800 shadow-sm shadow-gray-200/50 dark:shadow-black/50 max-w-full overflow-auto">
-        <EventCalendar calendarData={calendarData} />
+        { isLoading && <LoadingEventGrid /> }
+        { error && <ErrorAlert error={JSON.parse(JSON.stringify(error))} /> }
+        { isSuccess && <EventCalendar calendarData={calendarData} deleteCalendarData={deleteCalendarData} leftDate={dateSpan.left} /> }
     </div>
     </>
   )

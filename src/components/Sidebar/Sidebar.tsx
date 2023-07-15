@@ -201,7 +201,7 @@ export function Sidebar() {
                     </span>
                 </li>
             </ul>}
-            <span className="absolute text-gray-600 text-xs mt-auto bottom-3">React Alpha v0.4.4.1</span>
+            <span className="absolute text-gray-600 text-xs mt-auto bottom-3">Alpha v1.0.0.0</span>
             {/* prealpha(0)-alpha(1)-beta(2)-releasecandidate(3)-release(4).major-changes.minor-changes.amount-of-fixed-bugs */}
         </div>
     </aside>

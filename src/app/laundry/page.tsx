@@ -9,6 +9,7 @@ import LoadingLaundryGrid from "@/components/LaundryCalendar/LoadingLaundryGrid"
 import LaundryEntry from "@/types/laundryEntry";
 import { laundryEntriesApi } from "@/redux/services/laundryEntriesApi";
 import datetimeDiff from "@/helpers/datetimeDiff";
+import { ErrorAlert } from "@/components/ErrorAlert";
  
 // export const metadata: Metadata = {
 //   title: 'Прачечная',
@@ -61,7 +62,7 @@ export default function Laundry() {
         </div>
         <div className="rounded-xl bg-gray-50 dark:bg-gray-800 shadow-sm shadow-gray-200/50 dark:shadow-black/50 overflow-auto">
         { isLoading && isLoadingWms && <LoadingLaundryGrid /> }
-        { error || errorWms && 'error' }
+        { error || errorWms && <ErrorAlert error={JSON.parse(JSON.stringify(error))} /> }
         { calendarData && isSuccessWms && <LaundryCalendar calendarData={calendarData} addEntry={addEntry} deleteEntry={deleteEntry} wms={wms} /> }
         </div>
     </>
