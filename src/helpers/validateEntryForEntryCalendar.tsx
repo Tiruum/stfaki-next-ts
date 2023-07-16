@@ -26,33 +26,22 @@ function getEmptySpace(todayEntries: Entry[]): number[] {
 };
 
 export default function validateEntryForEntryCalendar(calendarData: Entry[], form: CreateEntry) {
-    if (true) {
-        if (form.from.slice(0, 10) === form.to.slice(0, 10)) {
-            
-            if ( Number(form.to.slice(11, 13))-Number(form.from.slice(11, 13)) <= 6 && Number(form.to.slice(11, 13)) > Number(form.from.slice(11, 13)) && Number(form.from.slice(11, 13)) >= 0 && Number(form.to.slice(11, 13)) <= 23 ) {
-                
-                let todayEntries = calendarData.filter(entry => entry.from.slice(0, 10) === form.from.slice(0, 10))
-                
-                if (todayEntries) {
-                    let emptySpace = [] as number[]
-
-                    Array.isArray(todayEntries) ? emptySpace = getEmptySpace(todayEntries) : emptySpace = getEmptySpace([todayEntries])
-
-                    if (range(form.from.slice(11, 16), form.to.slice(11, 16)).sort().join(',') === emptySpace.filter(x => range(form.from.slice(11, 16), form.to.slice(11, 16)).includes(x)).sort().join(',')) {
-                        return true
-                        // this.$emit('addEntry', form) // Добавить запись, которая прошла валидацию
-                    } else {
-                        return ("Записи перекрывают друг друга")
-                    }
+    if (form.from.slice(0, 10) === form.to.slice(0, 10)) { // Если даты равны
+        if ( Number(form.to.slice(11, 13))-Number(form.from.slice(11, 13)) <= 6 && Number(form.to.slice(11, 13)) > Number(form.from.slice(11, 13)) && Number(form.from.slice(11, 13)) >= 0 && Number(form.to.slice(11, 13)) <= 23 ) {
+            let todayEntries = calendarData.filter(entry => entry.from.slice(0, 10) === form.from.slice(0, 10)) // Записи на выбранную дату
+            if (todayEntries) {
+                let emptySpace = [] as number[]
+                Array.isArray(todayEntries) ? emptySpace = getEmptySpace(todayEntries) : emptySpace = getEmptySpace([todayEntries])
+                if (range(form.from.slice(11, 16), form.to.slice(11, 16)).sort().join(',') === emptySpace.filter(x => range(form.from.slice(11, 16), form.to.slice(11, 16)).includes(x)).sort().join(',')) {
+                    return true
+                } else {
+                    return ("Записи перекрывают друг друга")
                 }
-            } else {
-                return ("Нельзя делать бронь дольше 6 часов или равной нулю")
             }
-            //this.$emit('addEntry', form)
         } else {
-            return ("Пока что можно бронировать комнату в пределах одного дня")
+            return ("Нельзя делать бронь дольше 6 часов или равной нулю")
         }
     } else {
-        return ("Вы не зарегистрированы")
+        return ("Пока что можно бронировать комнату в пределах одного дня")
     }
 }

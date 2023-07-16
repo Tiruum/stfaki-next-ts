@@ -15,6 +15,16 @@ import { dateIntervalFromToday } from "@/helpers/dateIntervalFromToday";
 //   description: 'Комната для собраний'
 // }
 
+interface HttpErrorResponce {
+    error: {
+        status: number,
+        data: {
+            statusCode: number,
+            message: string
+        }
+    }
+}
+
 export default function Kds() {
 
     const ROOM_NAME = 'kds'
@@ -23,7 +33,7 @@ export default function Kds() {
 
     const addCalendarData = async (entry: CreateEntry): Promise<void> => {
         console.log(entry)
-        await addEntry({
+        const result = await addEntry({
             userId: 6,
             roomValue: ROOM_NAME,
             title: entry.title,
@@ -33,6 +43,9 @@ export default function Kds() {
             color: entry.color,
             type: entry.type
         })
+        if (JSON.parse(JSON.stringify(result)).error) {
+            alert(JSON.parse(JSON.stringify(result)).error.data.message)
+        }
     }
 
     const deleteCalendarData = async (id: number): Promise<void> => {
