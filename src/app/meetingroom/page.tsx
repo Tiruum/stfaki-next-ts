@@ -27,12 +27,12 @@ interface HttpErrorResponce {
     }
 }
 
-export default function Kds() {
+export default function MeetingRoom() {
 
     const [cookies, setCookie, removeCookies] = useCookies(['user'])
     let loggedUser = useAuthUser(cookies)
 
-    const ROOM_NAME = 'kds'
+    const ROOM_NAME = 'meetingroom'
 
     let [ifAdd, setIfAdd] = useState(false)
 
@@ -83,8 +83,8 @@ export default function Kds() {
   return (
     <>
     <div className="mb-8">
-        <h1 className="font-semibold text-3xl">Комната для собраний 👥</h1>
-        <p className="text-base mt-2">Здесь вы можете записаться в КДС</p>
+        <h1 className="font-semibold text-3xl">Переговорная 📞</h1>
+        <p className="text-base mt-2">Здесь вы можете устраивать важные созвоны</p>
         <button className="px-3 py-1 mt-2 border border-gray-50 rounded-md hover:opacity-70 transition-opacity" onClick={() => setIfAdd(!ifAdd)}>Записаться</button>
     </div>
     {

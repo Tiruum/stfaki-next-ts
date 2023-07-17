@@ -10,6 +10,8 @@ import LaundryEntry from "@/types/laundryEntry";
 import { laundryEntriesApi } from "@/redux/services/laundryEntriesApi";
 import datetimeDiff from "@/helpers/datetimeDiff";
 import { ErrorAlert } from "@/components/ErrorAlert";
+import { useCookies } from "react-cookie";
+import { useAuthUser } from "@/hooks/useAuthUser";
  
 // export const metadata: Metadata = {
 //   title: 'Прачечная',
@@ -18,30 +20,41 @@ import { ErrorAlert } from "@/components/ErrorAlert";
 
 export default function Laundry() {
 
+    const [cookies, setCookie, removeCookies] = useCookies(['user'])
+    let loggedUser = useAuthUser(cookies)
+
     const addEntry = async (entry: {w: number, h: number}, time: string) => {
-        const dublicat = calendarData.find(function(entryByDay: LaundryEntry) {
-            return (entryByDay.wmInfo.value === entry.h) && (entryByDay.time === time)
-        })
-        if (!!!dublicat && !!entry.h && datetimeDiff(selectedDate + 'T' + time.slice(0, 5)) > 0) {
-            await addLaundryEntry({
-                userId: 6,
-                time: time,
-                wmValue: entry.h,
-                status: "booked",
-                date: selectedDate,
+        if (!!loggedUser?.id) {
+            const dublicat = calendarData.find(function(entryByDay: LaundryEntry) {
+                return (entryByDay.wmInfo.value === entry.h) && (entryByDay.time === time)
             })
-        } else if (datetimeDiff(selectedDate + 'T' + time.slice(0, 5)) <= 0) {
-            alert("Запись на это время окончена")
+            if (!!!dublicat && !!entry.h && datetimeDiff(selectedDate + 'T' + time.slice(0, 5)) > 0) {
+                await addLaundryEntry({
+                    userId: loggedUser.id,
+                    time: time,
+                    wmValue: entry.h,
+                    status: "booked",
+                    date: selectedDate,
+                })
+            } else if (datetimeDiff(selectedDate + 'T' + time.slice(0, 5)) <= 0) {
+                alert("Запись на это время окончена")
+            } else {
+                alert("Такая запись уже существует")
+            }
         } else {
-            alert("Такая запись уже существует")
+            alert("Вы не зарегистрированы")
         }
     }
 
     const deleteEntry = async (entry: LaundryEntry) => {
-        if ((entry.userId === 6) && (datetimeDiff(entry.date + 'T' + entry.time.slice(0, 5)) > 0)) {
-            await deleteLaundryEntry(entry.id)
+        if (!!loggedUser?.id) {
+            if ((entry.userId === loggedUser.id) && (datetimeDiff(entry.date + 'T' + entry.time.slice(0, 5)) > 0)) {
+                await deleteLaundryEntry(entry.id)
+            } else {
+                alert('Вы не можете удалить эту запись')
+            }
         } else {
-            alert('Вы не можете удалить эту запись')
+            alert("Вы не зарегистрированы")
         }
     }
 

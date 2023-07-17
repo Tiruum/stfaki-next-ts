@@ -1,7 +1,10 @@
+"use client";
+
 import './globals.css'
 import { Inter } from 'next/font/google'
 import { Sidebar } from '@/components/Sidebar/Sidebar'
 import { StoreProvider } from '@/redux/StoreProvider'
+import { CookiesProvider } from 'react-cookie'
 
 const inter = Inter({ subsets: ['cyrillic'] })
 
@@ -26,6 +29,7 @@ export default function RootLayout({
   return (
     <html lang="ru">
       <body className={inter.className}>
+      <CookiesProvider>
       <StoreProvider>
         <div className="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white h-full min-h-screen relative overflow-auto">
           {/* <ToastList /> */}
@@ -39,6 +43,7 @@ export default function RootLayout({
           </div>
         </div>
         </StoreProvider>
+        </CookiesProvider>
       </body>
     </html>
   )

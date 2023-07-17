@@ -2,15 +2,19 @@
 
 import datetimeDiff from "@/helpers/datetimeDiff";
 import dotDateToDash from "@/helpers/dotDateToDash";
+import { useAuthUser } from "@/hooks/useAuthUser";
 import { laundryEntriesApi } from "@/redux/services/laundryEntriesApi";
 import LaundryEntry from "@/types/laundryEntry";
 import Link from "next/link";
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
 
 export function Sidebar() {
     const pathname = usePathname()
-    let [loggedIn, setLoggedIn] = useState(false)
+    const [cookies, setCookie, removeCookies] = useCookies(['user'])
+    let loggedUser = useAuthUser(cookies)
+
     let [ifShow, setIfShow] = useState(false)
     function handleResize() {
         if ((window.innerWidth <= 640) && (ifShow == true)) {
@@ -27,8 +31,8 @@ export function Sidebar() {
     const todayDate = dotDateToDash(new Date().toLocaleDateString("eu-RU", {timeZone: "Europe/Moscow"}))
     const {data, isLoading, error} = laundryEntriesApi.useGetLaundryEntriesByDateQuery(todayDate)
     let laundryEntriesQuantity = null
-    if (!isLoading) {
-        laundryEntriesQuantity = data.filter((entry: LaundryEntry) => (entry.userInfo.username === 'Никита Буланов' && datetimeDiff(entry.date + 'T' + entry.time.slice(0, 5)) > 0)).length
+    if (!isLoading && !!loggedUser?.username) {
+        laundryEntriesQuantity = data.filter((entry: LaundryEntry) => (entry.userInfo.username === loggedUser.username && datetimeDiff(entry.date + 'T' + entry.time.slice(0, 5)) > 0)).length
     }
 
     // const activeStyle = "bg-gray-200 dark:bg-gray-700 text-gray-50 dark:text-white"
@@ -40,19 +44,24 @@ export function Sidebar() {
         <div className="overflow-y-auto py-4 px-3 bg-white dark:bg-gray-800 h-full left-0 shadow-sm backdrop-filter backdrop-blur-lg bg-opacity-40 dark:backdrop-filter dark:backdrop-blur-lg dark:bg-opacity-40">
             <ul className="space-y-2">
                 <li>
-                    {loggedIn ? <span v-if="$auth.loggedIn" className="items-center flex p-2 text-xl font-semibold text-gray-900 dark:text-white">
-                        <div className="aspect-square lg:h-12 h-6 rounded-full bg-white overflow-hidden">
-                            <div className="w-full h-full object-center object-cover rounded-full"></div>
-                        </div>
-                        <span className={`ml-3 ${ifShow ? 'flex' : 'hidden'} lg:flex lg:flex-col`}>
-                            <span className="text-md">Username</span>
-                            <span className="text-sm text-gray-500 dark:text-gray-400">Баланс: {"balance"}₽</span>
+                    {loggedUser ?
+                    <Link href={`/user/${loggedUser.id}`}>
+                        <span className="items-center flex p-2 text-xl font-semibold text-gray-900 dark:text-white">
+                            <div className="aspect-square lg:h-12 h-6 rounded-full bg-white overflow-hidden">
+                                <div className="w-full h-full object-center object-cover rounded-full"></div>
+                            </div>
+                            <span className={`ml-3 ${ifShow ? 'flex' : 'hidden'} lg:flex lg:flex-col`}>
+                                <span className="text-md whitespace-nowrap text-ellipsis overflow-hidden">{loggedUser.username}</span>
+                                <span className="text-sm text-gray-500 dark:text-gray-400">Баланс: {loggedUser.balance}₽</span>
+                            </span>
                         </span>
-                    </span>:
-                    <span className="items-center flex p-2 text-base font-semibold text-gray-900 dark:text-white cursor-pointer">
-                        <div className="aspect-square h-6 rounded-full bg-white overflow-hidden"></div>
-                        <span className={`ml-3 ${ifShow ? 'block' : 'hidden'} lg:block`} onClick={() => setLoggedIn(true)}>Войти</span>
-                    </span>}
+                    </Link>:
+                    <Link href="/auth">
+                        <span className="items-center flex p-2 text-base font-semibold text-gray-900 dark:text-white cursor-pointer">
+                            <div className="aspect-square h-6 rounded-full bg-white overflow-hidden"></div>
+                            <span className={`ml-3 ${ifShow ? 'block' : 'hidden'} lg:block`}>Войти</span>
+                        </span>
+                    </Link>}
                 </li>
                 <li>
                     <Link href="/" className={
@@ -187,7 +196,7 @@ export function Sidebar() {
                     </Link>
                 </li>
             </ul>
-            {loggedIn &&
+            {loggedUser &&
             <ul className="pt-4 mt-4 space-y-2 border-t border-gray-200 dark:border-gray-700">
                 <li>
                     <span className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
@@ -197,11 +206,11 @@ export function Sidebar() {
                                 d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
                                 clipRule="evenodd"></path>
                         </svg>
-                        <span className="flex-1 ml-3 whitespace-nowrap hidden lg:block cursor-pointer" onClick={() => setLoggedIn(false)}>Выйти</span>
+                        <span className="flex-1 ml-3 whitespace-nowrap hidden lg:block cursor-pointer" onClick={() => removeCookies('user')}>Выйти</span>
                     </span>
                 </li>
             </ul>}
-            <span className="absolute text-gray-600 text-xs mt-auto bottom-3">Alpha v1.0.0.0</span>
+            <span className="absolute text-gray-600 text-xs mt-auto bottom-3">Beta v2.0.0.0</span>
             {/* prealpha(0)-alpha(1)-beta(2)-releasecandidate(3)-release(4).major-changes.minor-changes.amount-of-fixed-bugs */}
         </div>
     </aside>
