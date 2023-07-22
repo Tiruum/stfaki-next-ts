@@ -11,7 +11,7 @@ interface Props {
 }
 
 export const ErrorAlert: FC<Props> = ({error}) => {
-    const { statusCode, message } = error.data
+    const { statusCode, message } = error?.data || { statusCode: null, message: null }
     return (
         <div className="flex flex-col justify-center items-center font-mono text-pink-500 p-6">
             <ErrorSvg />

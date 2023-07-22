@@ -29,9 +29,9 @@ export function Sidebar() {
     // Код для того, чтобы получить количество записей пользователя в стиралку
     // let selectedDate = useSelector((state: {selectedDate: string}) => selectSelectedDateModule(state))
     const todayDate = dotDateToDash(new Date().toLocaleDateString("eu-RU", {timeZone: "Europe/Moscow"}))
-    const {data, isLoading, error} = laundryEntriesApi.useGetLaundryEntriesByDateQuery(todayDate)
+    const {data, isLoading, error, isSuccess} = laundryEntriesApi.useGetLaundryEntriesByDateQuery(todayDate)
     let laundryEntriesQuantity = null
-    if (!isLoading && !!loggedUser?.username) {
+    if (!isLoading && !!loggedUser?.username && isSuccess) {
         laundryEntriesQuantity = data.filter((entry: LaundryEntry) => (entry.userInfo.username === loggedUser.username && datetimeDiff(entry.date + 'T' + entry.time.slice(0, 5)) > 0)).length
     }
 
@@ -43,14 +43,15 @@ export function Sidebar() {
         <aside className={`lg:w-72 sm:w-16 ${ifShow ? 'w-full' : 'w-0'} h-screen fixed transition-all overflow-auto z-[21]`} aria-label="Sidebar">
         <div className="overflow-y-auto py-4 px-3 bg-white dark:bg-gray-800 h-full left-0 shadow-sm backdrop-filter backdrop-blur-lg bg-opacity-40 dark:backdrop-filter dark:backdrop-blur-lg dark:bg-opacity-40">
             <ul className="space-y-2">
-                <li>
+                <li onClick={() => setIfShow(false)}>
                     {loggedUser ?
-                    <Link href={`/user/${loggedUser.id}`}>
+                    <Link href={`/user`}>
                         <span className="items-center flex p-2 text-xl font-semibold text-gray-900 dark:text-white">
-                            <div className="aspect-square lg:h-12 h-6 rounded-full bg-white overflow-hidden">
-                                <div className="w-full h-full object-center object-cover rounded-full"></div>
+                            <div className="aspect-square lg:h-12 h-6 rounded-full bg-gray-400 overflow-hidden flex justify-center items-end">
+                                {/* <div className="w-full h-full object-center object-cover rounded-full"></div> */}
+                                {/* <UserIcon /> */}
                             </div>
-                            <span className={`ml-3 ${ifShow ? 'flex' : 'hidden'} lg:flex lg:flex-col`}>
+                            <span className={`ml-3 ${ifShow ? 'flex' : 'hidden'} lg:flex lg:flex-col align-baseline md:space-x-0 space-x-2`}>
                                 <span className="text-md whitespace-nowrap text-ellipsis overflow-hidden">{loggedUser.username}</span>
                                 <span className="text-sm text-gray-500 dark:text-gray-400">Баланс: {loggedUser.balance}₽</span>
                             </span>
@@ -63,7 +64,7 @@ export function Sidebar() {
                         </span>
                     </Link>}
                 </li>
-                <li>
+                <li onClick={() => setIfShow(false)}>
                     <Link href="/" className={
                         pathname === '/' ?
                         "flex items-center p-2 text-base font-normal rounded-lg bg-gray-200 dark:bg-gray-700 text-black dark:text-white":
@@ -80,7 +81,7 @@ export function Sidebar() {
                         <span className={`ml-3 ${ifShow ? 'block' : 'hidden'} lg:block`}>Главная</span>
                     </Link>
                 </li>
-                <li>
+                <li onClick={() => setIfShow(false)}>
                     <Link href="/laundry" className={
                         pathname === '/laundry' ?
                         "flex items-center p-2 text-base font-normal rounded-lg bg-gray-200 dark:bg-gray-700 text-black dark:text-white":
@@ -105,7 +106,7 @@ export function Sidebar() {
                         }
                         </Link>
                 </li>
-                <li>
+                <li onClick={() => setIfShow(false)}>
                     <Link href="/club" className={
                         pathname === '/club' ?
                         "flex items-center p-2 text-base font-normal rounded-lg bg-gray-200 dark:bg-gray-700 text-black dark:text-white":
@@ -122,7 +123,7 @@ export function Sidebar() {
                         <span className={`flex-1 ml-3 whitespace-nowrap ${ifShow ? 'block' : 'hidden'} lg:block`}>Клуб Романтики</span>
                     </Link>
                 </li>
-                <li>
+                <li onClick={() => setIfShow(false)}>
                     <Link href="/kds" className={
                         pathname === '/kds' ?
                         "flex items-center p-2 text-base font-normal rounded-lg bg-gray-200 dark:bg-gray-700 text-black dark:text-white":
@@ -140,7 +141,7 @@ export function Sidebar() {
                         <span className={`flex-1 ml-3 whitespace-nowrap ${ifShow ? 'block' : 'hidden'} lg:block`}>Комната для собраний</span>
                     </Link>
                 </li>
-                <li>
+                <li onClick={() => setIfShow(false)}>
                     <Link href="/meetingroom" className={
                         pathname === '/meetingroom' ?
                         "flex items-center p-2 text-base font-normal rounded-lg bg-gray-200 dark:bg-gray-700 text-black dark:text-white":
@@ -159,7 +160,7 @@ export function Sidebar() {
                 </li>
             </ul>
             <ul className="pt-4 mt-4 space-y-2 border-t border-gray-200 dark:border-gray-700">
-                <li>
+                <li onClick={() => setIfShow(false)}>
                     <Link href="/instruments" className={
                         pathname === '/instruments' ?
                         "flex items-center p-2 text-base font-normal rounded-lg bg-gray-200 dark:bg-gray-700 text-black dark:text-white":
@@ -177,7 +178,7 @@ export function Sidebar() {
                             className="justify-center items-center hidden lg:inline-flex px-2 ml-3 text-sm font-medium text-gray-800 bg-gray-200 rounded-full dark:bg-gray-700 dark:text-gray-300">Скоро</span>
                     </Link>
                 </li>
-                <li>
+                <li onClick={() => setIfShow(false)}>
                     <Link href="/vacuumcleaner" className={
                         pathname === '/vacuumcleaner' ?
                         "flex items-center p-2 text-base font-normal rounded-lg bg-gray-200 dark:bg-gray-700 text-black dark:text-white":
@@ -198,7 +199,7 @@ export function Sidebar() {
             </ul>
             {loggedUser &&
             <ul className="pt-4 mt-4 space-y-2 border-t border-gray-200 dark:border-gray-700">
-                <li>
+                <li onClick={() => {removeCookies('user'); setIfShow(false)}}>
                     <span className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
                         <svg className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                             fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -206,7 +207,7 @@ export function Sidebar() {
                                 d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z"
                                 clipRule="evenodd"></path>
                         </svg>
-                        <span className="flex-1 ml-3 whitespace-nowrap hidden lg:block cursor-pointer" onClick={() => removeCookies('user')}>Выйти</span>
+                        <span className="flex-1 ml-3 whitespace-nowrap hidden lg:block cursor-pointer">Выйти</span>
                     </span>
                 </li>
             </ul>}
@@ -216,8 +217,8 @@ export function Sidebar() {
     </aside>
     {
         !ifShow ? 
-        <div onClick={() => setIfShow(true)} className="sm:hidden fixed text-white bg-gray-800 w-10 h-10 top-3 left-3 rounded-full flex items-center justify-center text-3xl font-semibold cursor-pointer opacity-90 z-[22]"><Plus /></div> :
-        <div onClick={() => setIfShow(false)} className='sm:hidden fixed text-white bg-gray-800 w-10 h-10 top-3 right-3 rounded-full flex items-center justify-center text-3xl font-semibold cursor-pointer opacity-90 z-[22]'><Cross /></div>
+        <div onClick={() => setIfShow(true)} className="sm:hidden fixed text-white bg-gray-50 dark:bg-gray-800 w-10 h-10 top-3 left-3 rounded-full flex items-center justify-center text-3xl font-semibold cursor-pointer opacity-90 z-[22]"><Plus /></div> :
+        <div onClick={() => setIfShow(false)} className='sm:hidden fixed text-white bg-gray-50 dark:bg-gray-800 w-10 h-10 top-3 right-3 rounded-full flex items-center justify-center text-3xl font-semibold cursor-pointer opacity-90 z-[22]'><Cross /></div>
     }
     </>
     )
@@ -235,6 +236,17 @@ function Plus() {
     return (
         <svg viewBox="0 0 512 512" width="20" height="20">
         <path fill='#9ca3af' d="M480,224H288V32c0-17.673-14.327-32-32-32s-32,14.327-32,32v192H32c-17.673,0-32,14.327-32,32s14.327,32,32,32h192v192   c0,17.673,14.327,32,32,32s32-14.327,32-32V288h192c17.673,0,32-14.327,32-32S497.673,224,480,224z"/>
+        </svg>
+    )
+}
+
+function UserIcon() {
+    return (
+        <svg x="0px" y="0px" viewBox="0 0 512 512" width="40" height="40">
+        <g>
+            <circle cx="256" cy="128" r="128" fill="#fafafa"/>
+            <path fill="#fafafa" d="M256,298.667c-105.99,0.118-191.882,86.01-192,192C64,502.449,73.551,512,85.333,512h341.333   c11.782,0,21.333-9.551,21.333-21.333C447.882,384.677,361.99,298.784,256,298.667z"/>
+        </g>
         </svg>
     )
 }

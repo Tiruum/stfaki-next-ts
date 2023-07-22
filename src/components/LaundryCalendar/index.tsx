@@ -11,10 +11,11 @@ interface Props {
     calendarData: LaundryEntry[],
     addEntry: Function,
     deleteEntry: Function,
-    wms: Wm[]
+    wms: Wm[],
+    selectedDate: string
 }
 
-export const LaundryCalendar: FunctionComponent<Props> = ({calendarData, addEntry, deleteEntry, wms}) => {
+export const LaundryCalendar: FunctionComponent<Props> = ({calendarData, addEntry, deleteEntry, wms, selectedDate}) => {
     const times= ['00:00 - 02:00',
         '02:40 - 04:40',
         '05:20 - 07:20',
@@ -36,14 +37,14 @@ export const LaundryCalendar: FunctionComponent<Props> = ({calendarData, addEntr
                 {wms.map((wm) => <div key={wm.value} className={`row-start-[1] col-start-[${wm.value+1}] sticky top-0 z-20 bg-white dark:bg-gray-700 border-gray-100 dark:border-black/10 bg-clip-padding text-gray-900 dark:text-gray-200 border-b text-sm font-medium py-2 text-center`}>{wm.value}</div>)}
                 
                 {/* Вывод столбца времени */}
-                {times.map((time, index) => <div key={`${time}`} className={`sticky row-start-[${Number(index+2)}] col-start-[1] border-gray-100 dark:border-gray-200/5 border-r text-xs p-1.5 text-right text-gray-400 uppercase sticky left-0 bg-white dark:bg-gray-800 font-medium`}>{time}</div>)}
+                {times.map((time, index) => <div key={`${time}`} className={`sticky left-0 row-start-[${Number(index+2)}] col-start-[1] border-gray-100 dark:border-gray-200/5 border-r text-xs p-1.5 text-right text-gray-400 uppercase sticky left-0 bg-white dark:bg-gray-800 font-medium`}>{time}</div>)}
                 
                 {/* Вывод сетки */}
                 {
                     times.map((time, index) => (
                         wms.map((wm, wmIndex) => (
                             <React.Fragment key={`${wm.value}_${time}`}>
-                                <div onClick={() => addEntry({w: Number(index+1), h: wm.value}, time)} className={`row-start-[${Number(index+2)}] col-start-[${wm.value+1}] border-gray-100 dark:border-gray-200/5 border-b border-r cursor-pointer`}></div>
+                                <div onClick={() => addEntry({w: Number(index+1), h: wm.value}, time)} className={`row-start-[${Number(index+2)}] col-start-[${wm.value+1}] ${new Date() >= new Date(selectedDate+'T'+time.slice(0, 5)) ? 'border-red-100 dark:border-red-500/10 cursor-not-allowed' : 'border-gray-100 dark:border-gray-200/5 cursor-pointer'} border-b border-r`}></div>
                             </React.Fragment>
                         ))
                     ))

@@ -3,7 +3,7 @@ import Entry, { CreateEntry } from "@/types/entry";
 
 export const entriesApi = createApi({
     reducerPath: 'entriesApi',
-    baseQuery: fetchBaseQuery({baseUrl: "http://localhost:3000/api/"}),
+    baseQuery: fetchBaseQuery({baseUrl: `http://${process.env.BASEURL || `${location.host}`}/api/`}),
     tagTypes: ['Entry'],
     endpoints: (builder) => ({
         getRoomEntries: builder.query<Entry[], {roomName: string, fromDate: string, toDate: string}>({

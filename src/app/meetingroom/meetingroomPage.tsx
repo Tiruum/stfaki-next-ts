@@ -2,7 +2,7 @@
 
 import { AddEntry } from "@/components/AddEntry";
 import { EventCalendar } from "@/components/EventCalendar";
-import { createContext, useEffect, useState } from "react";
+import { useState } from "react";
 import Entry, { CreateEntry } from "@/types/entry";
 import { entriesApi } from "@/redux/services/entriesApi";
 import LoadingEventGrid from "@/components/EventCalendar/LoadingEventCalendar";
@@ -10,11 +10,6 @@ import { ErrorAlert } from "@/components/ErrorAlert";
 import { dateIntervalFromToday } from "@/helpers/dateIntervalFromToday";
 import { useCookies } from "react-cookie";
 import { useAuthUser } from "@/hooks/useAuthUser";
- 
-// export const metadata: Metadata = {
-//   title: 'Комната для собраний',
-//   description: 'Комната для собраний'
-// }
 
 interface HttpErrorResponce {
     error: {
@@ -26,12 +21,12 @@ interface HttpErrorResponce {
     }
 }
 
-export default function Club() {
+export default function MeetingRoomPage() {
 
     const [cookies, setCookie, removeCookies] = useCookies(['user'])
     let loggedUser = useAuthUser(cookies)
 
-    const ROOM_NAME = 'romantiki'
+    const ROOM_NAME = 'meetingroom'
 
     let [ifAdd, setIfAdd] = useState(false)
 
@@ -80,9 +75,9 @@ export default function Club() {
   
   return (
     <>
-        <h1 className="font-semibold text-3xl">Клуб «Романтики»💕</h1>
     <div className="mb-8">
-        <p className="text-base mt-2">Здесь вы можете записаться в клуб «Романтики»</p>
+        <h1 className="font-semibold text-3xl">Переговорная 📞</h1>
+        <p className="text-base mt-2">Здесь вы можете устраивать важные созвоны</p>
         <button className="px-3 py-1 mt-2 border border-gray-50 rounded-md hover:opacity-70 transition-opacity" onClick={() => setIfAdd(!ifAdd)}>Записаться</button>
     </div>
     {

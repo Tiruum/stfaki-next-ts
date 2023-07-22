@@ -4,7 +4,7 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react"
 
 export const laundryEntriesApi = createApi({
     reducerPath: "laundryEntriesApi",
-    baseQuery: fetchBaseQuery({baseUrl: "http://localhost:3000/api/"}),
+    baseQuery: fetchBaseQuery({baseUrl: `http://${process.env.BASEURL || `${location.host}`}/api/`}),
     tagTypes: ['LaundryEntry'],
     endpoints: (builder) => ({
         getLaundryEntries: builder.query<LaundryEntry[], void>({ query: () => `wm-entries/` }),

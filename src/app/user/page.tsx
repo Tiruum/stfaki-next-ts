@@ -17,13 +17,13 @@ export const metadata: Metadata = {
     description: 'Профиль пользователя'
 }
 
-export default function Page({params}: {params: {id: number}}) {
-    const users = [{id: 1, name: 'Тимур', surname: 'Селин', dateOfBirth: '29.04.2002', email: 'selin.ta@phystech.edu', room: '232', dorm: '10', social: {tg: '@umpa_of_lumpia', vk: '@tiruum', phone: '89536151008'}, balance: 1000},
-    {id: 2, name: 'Никита', surname: 'Буланов', dateOfBirth: '14.13.2002', email: 'bulanov.na@phystech.edu', room: '232', dorm: '10', social: {tg: '@umpa_of_lumpia', vk: '@tiruum', phone: '89536151008'}, balance: 1000}] as User[]
-    const user = users.find((user) => user.id == params.id)
+export default function Page() {
+    // const users = [{id: 1, name: 'Тимур', surname: 'Селин', dateOfBirth: '29.04.2002', email: 'selin.ta@phystech.edu', room: '232', dorm: '10', social: {tg: '@umpa_of_lumpia', vk: '@tiruum', phone: '89536151008'}, balance: 1000},
+    // {id: 2, name: 'Никита', surname: 'Буланов', dateOfBirth: '14.13.2002', email: 'bulanov.na@phystech.edu', room: '232', dorm: '10', social: {tg: '@umpa_of_lumpia', vk: '@tiruum', phone: '89536151008'}, balance: 1000}] as User[]
+    // const user = users.find((user) => user.id == params.id)
     return (
     <>
-            <div className="mb-8">
+            {/* <div className="mb-8">
             <h1 className="font-semibold text-3xl">Профиль 👨</h1>
             <p className="text-base mt-2">Просматривайте и изменяйте свои данные</p>
         </div>
@@ -34,7 +34,7 @@ export default function Page({params}: {params: {id: number}}) {
                     <div className="w-32 h-32 aspect-square bg-gray-500 rounded-full border-2 border-gray-500"></div>
                     <div className="flex flex-col">
                         <p className="font-semibold text-2xl">{`${user?.name} ${user?.surname}`}</p>
-                        <span>id: {params.id}</span>
+                        <span>id: {1}</span>
                         <span>Email: {user?.email}</span>
                         <span>Квартира: {user?.dorm}ка, {user?.room}</span>
 
@@ -45,7 +45,7 @@ export default function Page({params}: {params: {id: number}}) {
                 </div>
             </div>
 
-        </div>
+        </div> */}
     </>
     )
 }

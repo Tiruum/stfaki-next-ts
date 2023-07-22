@@ -43,12 +43,12 @@ export const AddEntry: FunctionComponent<Props> = ({closeModal, calendarData, se
                 <h2 className="font-semibold text-lg">Название и дата</h2>
                 <div className="w-full mt-1">
                     <label className="text-xs text-gray-500" html-for="title">Название</label><br />
-                    <input className="inpt" type="text" id="title" name="title" placeholder="Просмотр фильма" required />
+                    <input className="inpt" type="text" id="title" name="title" placeholder="Просмотр фильма" maxLength={25} required />
                 </div>
 
                 <div className="w-full mt-1">
                     <label className="text-xs text-gray-500" html-for="description">Описание</label><br />
-                    <input className="inpt" type="text" id="description" name="description" placeholder="Смотрим Карты, деньги, два ствола" />
+                    <input className="inpt" type="text" id="description" name="description" placeholder="Смотрим Карты, деньги, два ствола" maxLength={50} />
                 </div>
 
                 <div className="flex flex-row gap-4 justify-evenly w-full mt-1">
@@ -68,11 +68,11 @@ export const AddEntry: FunctionComponent<Props> = ({closeModal, calendarData, se
                 <div className="flex flex-row gap-4 justify-evenly w-full">
                     <div className="w-1/2">
                         <label className="text-xs text-gray-500" html-for="start_time">Время начала</label><br />
-                        <input className="inpt" type="time" id="start_time" name="start_time" step="3600" required />
+                        <input className="inpt" type="time" id="start_time" name="start_time" required />
                     </div>
                     <div className="w-1/2">
                         <label className="text-xs text-gray-500" html-for="end_time">Время конца</label><br />
-                        <input className="inpt" type="time" id="end_time" name="end_time" step="3600" required />
+                        <input className="inpt" type="time" id="end_time" name="end_time" required />
                     </div>
                 </div>
 
