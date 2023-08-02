@@ -6,4 +6,9 @@ export default interface User {
     balance: number,
     banned: boolean,
     banReason: string | null,
+    roles: {
+        id: number,
+        value: string,
+        description: string
+    }
 }

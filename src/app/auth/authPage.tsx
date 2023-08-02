@@ -1,6 +1,7 @@
 "use client";
 
 import { parseJwt } from "@/helpers/parseJwt";
+import useToasts from "@/hooks/useToasts";
 import { authApi } from "@/redux/services/authApi";
 import { useRouter } from "next/navigation";
 import { useState } from "react"
@@ -33,25 +34,27 @@ const LoginForm = ({setIfLogin}: any) => {
         const result = await loginUser({email, password})
         if (email.split('@')[1] === 'phystech.edu') {
             if (JSON.parse(JSON.stringify(result)).error) {
-                alert(JSON.parse(JSON.stringify(result)).error.data.message)
+                addToast({type: "error", message: JSON.parse(JSON.stringify(result)).error.data.message, timeout: 5000})
             } else {
                 setCookie('user', parseJwt(JSON.parse(JSON.stringify(result)).data.token), {path: '/'})
                 router.push('/')
+                addToast({type: "success", message: "Вы успешно вошли", timeout: 3000})
             }
         } else {
-            alert('Введите почту в домене @phystech.edu')
+            addToast({type: "error", message: "Введите почту в домене @phystech.edu", timeout: 5000})
         }
     }
     const [loginUser, {}] = authApi.useLoginUserMutation()
+    const {addToast} = useToasts()
     return (
         <form className="space-y-2" onSubmit={(e) => {e.preventDefault(); login()}}>
             <div>
                 <label>Почта</label>
-                <input type="email" id="email" name="email" className="inpt bg-gray-800 text-gray-50" placeholder="zemlya.vi@phystech.edu" />
+                <input type="email" id="email" name="email" className="inpt bg-gray-800 text-gray-50" placeholder="ivanov.ii@phystech.edu" />
             </div>
             <div>
                 <label>Пароль</label>
-                <input type="password" id="password" name="password" className="inpt bg-gray-800 text-gray-50" />
+                <input type="password" id="password" name="password" className="inpt bg-gray-800 text-gray-50" placeholder="●●●●●●●●●●●" />
             </div>
             <div className="pt-2 w-full">
                 <button type="submit" className="px-6 py-2 rounded border ml-auto">Войти</button>
@@ -62,6 +65,7 @@ const LoginForm = ({setIfLogin}: any) => {
 }
 
 const RegistrationForm = ({setIfLogin}: any) => {
+    const {addToast} = useToasts()
     const [cookies, setCookie] = useCookies(['user'])
     const router = useRouter()
     const register = async () => {
@@ -79,10 +83,10 @@ const RegistrationForm = ({setIfLogin}: any) => {
                     router.push('/')
                 }
             } else {
-                alert('Введите почту в домене @phystech.edu')
+                addToast({type: "error", message: "Введите почту в домене @phystech.edu", timeout: 5000})
             }
         } else {
-            alert('Пароли не совпадают')
+            addToast({type: "error", message: "Пароли не совпадают", timeout: 5000})
         }
     }
     const [registerUser, {}] = authApi.useRegisterUserMutation()
@@ -90,19 +94,19 @@ const RegistrationForm = ({setIfLogin}: any) => {
         <form className="space-y-2" onSubmit={(e) => {e.preventDefault(); register()}}>
             <div>
                 <label>Имя Фамилия</label>
-                <input type="text" id="username" name="username" className="inpt bg-gray-800 text-gray-50" />
+                <input type="text" id="username" name="username" className="inpt bg-gray-800 text-gray-50" placeholder="Иван Иванов" />
             </div>
             <div>
                 <label>Почта</label>
-                <input type="email" id="email" name="email" className="inpt bg-gray-800 text-gray-50" />
+                <input type="email" id="email" name="email" className="inpt bg-gray-800 text-gray-50" placeholder="ivanov.ii@phystech.edu" />
             </div>
             <div>
                 <label>Пароль</label>
-                <input type="password" id="password" name="password" className="inpt bg-gray-800 text-gray-50" />
+                <input type="password" id="password" name="password" className="inpt bg-gray-800 text-gray-50" placeholder="●●●●●●●●●●●" />
             </div>
             <div>
                 <label>Повторите пароль</label>
-                <input type="password" id="repeatPassword" name="repeatPassword" className="inpt bg-gray-800 text-gray-50" />
+                <input type="password" id="repeatPassword" name="repeatPassword" className="inpt bg-gray-800 text-gray-50" placeholder="●●●●●●●●●●●" />
             </div>
             <div className="pt-2 w-full">
                 <button type="submit" className="px-6 py-2 rounded border ml-auto">Войти</button>

@@ -2,7 +2,6 @@
 
 import { FunctionComponent } from "react";
 import Entry, { CreateEntry } from "@/types/entry";
-import validateEntryForEntryCalendar from "@/helpers/validateEntryForEntryCalendar";
 import { getTodayDate } from "@/helpers/getTodayDate";
 
 interface Props {
@@ -32,8 +31,7 @@ export const AddEntry: FunctionComponent<Props> = ({closeModal, calendarData, se
         form.to = date + 'T' + (document.querySelector('#end_time') as HTMLInputElement)?.value
         form.color = (document.querySelector('#color') as HTMLInputElement).value
         form.type = (document.querySelector('#type') as HTMLInputElement).value
-        const output = validateEntryForEntryCalendar(calendarData, form)
-        output === true ? setCalendarData({...form}) : alert(output)
+        setCalendarData({...form})
     }
 
     return (

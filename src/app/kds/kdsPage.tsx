@@ -11,10 +11,17 @@ import { ErrorAlert } from "@/components/ErrorAlert";
 import { dateIntervalFromToday } from "@/helpers/dateIntervalFromToday";
 import { useCookies } from "react-cookie";
 import { useAuthUser } from "@/hooks/useAuthUser";
+import useToasts from "@/hooks/useToasts";
  
 // export const metadata: Metadata = {
 //   title: 'Комната для собраний',
 //   description: 'Комната для собраний'
+// }
+
+// const old = alert
+// alert = function() {
+//     console.log(new Error().stack)
+//     old.apply(window, arguments)
 // }
 
 interface HttpErrorResponce {
@@ -50,12 +57,12 @@ export default function KdsPage() {
                 type: entry.type
             })
             if (JSON.parse(JSON.stringify(result)).error) {
-                alert(JSON.parse(JSON.stringify(result)).error.data.message)
+                addToast({type: 'error', message: JSON.parse(JSON.stringify(result)).error.data.message, timeout: 5000})
             } else {
-                alert("Запись успешно создана!")
+                addToast({type: 'success', message: "Запись успешно создана", timeout: 5000})
             }
         } else {
-            alert('Вы не зарегистрированы')
+            addToast({type: 'error', message: "Вы не зарегистрированы", timeout: 5000})
         }
     }
 
@@ -64,10 +71,10 @@ export default function KdsPage() {
             if ((loggedUser.id === entry.userId) || (loggedUser.roles.value === 'admin')) {
                 if (confirm("Вы действительно хотите удалить эту запись?")) await deleteEntry(entry.id)
             } else {
-                alert("Вы не можете удалить чужую запись")
+                addToast({type: 'error', message: "Вы не можете удалить чужую запись", timeout: 5000})
             }
         } else {
-            alert('Вы не зарегистрированы')
+            addToast({type: 'error', message: "Вы не зарегистрированы", timeout: 5000})
         }
     }
 
@@ -78,6 +85,8 @@ export default function KdsPage() {
     const {data: calendarData, isLoading, error, isSuccess} = entriesApi.useGetRoomEntriesQuery({roomName: ROOM_NAME, fromDate: dateSpan.left, toDate: dateSpan.right})
     const [addEntry, {}] = entriesApi.useAddEntryToRoomMutation()
     const [deleteEntry, {}] = entriesApi.useDeleteEntryFromRoomMutation()
+
+    const {addToast} = useToasts()
   
   return (
     <>

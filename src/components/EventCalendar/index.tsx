@@ -23,12 +23,12 @@ export const EventCalendar: FunctionComponent<Props> = ({calendarData, deleteCal
         return nextDay.toLocaleDateString()
     }
 
-    const times = Array(25).fill(0).map((element, index) => index)
+    const times = Array(24).fill(0).map((element, index) => index)
     
     return (
         <>
         <div className="bg-white dark:bg-gray-800 shadow-xl overflow-hidden">
-        <div className="overflow-auto grid grid-cols-[70px,repeat(7,164px)] grid-rows-[auto,repeat(25,60px)] relative">
+        <div className="overflow-auto grid grid-cols-[70px,repeat(7,164px)] grid-rows-[auto,repeat(24,60px)] relative">
             
             {/* Calendar frame */}
             <div className="row-start-[1] col-start-[1] sticky top-0 z-20 bg-white dark:bg-gray-700 border-gray-100 dark:border-black/10 bg-clip-padding text-gray-900 dark:text-gray-200 border-b text-sm font-medium py-2 text-center"></div>

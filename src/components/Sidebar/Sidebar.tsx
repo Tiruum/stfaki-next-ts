@@ -3,6 +3,8 @@
 import datetimeDiff from "@/helpers/datetimeDiff";
 import dotDateToDash from "@/helpers/dotDateToDash";
 import { useAuthUser } from "@/hooks/useAuthUser";
+import useToasts from "@/hooks/useToasts";
+import { authApi } from "@/redux/services/authApi";
 import { laundryEntriesApi } from "@/redux/services/laundryEntriesApi";
 import LaundryEntry from "@/types/laundryEntry";
 import Link from "next/link";
@@ -15,11 +17,14 @@ export function Sidebar() {
     const [cookies, setCookie, removeCookies] = useCookies(['user'])
     let loggedUser = useAuthUser(cookies)
 
+    const {data: userData} = authApi.useGetUserInfoQuery(loggedUser?.id, { skip: !!!loggedUser?.id })
+
+    const {addToast} = useToasts()
+
     let [ifShow, setIfShow] = useState(false)
     function handleResize() {
         if ((window.innerWidth <= 640) && (ifShow == true)) {
         setIfShow(false)
-        console.log(1);
         }
     }
     useEffect(() => {
@@ -40,7 +45,7 @@ export function Sidebar() {
     // const defaultStyle = "flex items-center p-2 text-base font-normal rounded-lg text-gray-900 dark:text-gray-50 hover:bg-gray-200 dark:hover:bg-gray-700"
     return (
         <>
-        <aside className={`lg:w-72 sm:w-16 ${ifShow ? 'w-full' : 'w-0'} h-screen fixed transition-all overflow-auto z-[21]`} aria-label="Sidebar">
+        <aside className={`lg:w-72 sm:w-16 ${ifShow ? 'w-full' : 'w-0'} h-screen fixed transition-all overflow-auto rounded-2xl z-[21]`} aria-label="Sidebar">
         <div className="overflow-y-auto py-4 px-3 bg-white dark:bg-gray-800 h-full left-0 shadow-sm backdrop-filter backdrop-blur-lg bg-opacity-40 dark:backdrop-filter dark:backdrop-blur-lg dark:bg-opacity-40">
             <ul className="space-y-2">
                 <li onClick={() => setIfShow(false)}>
@@ -53,7 +58,7 @@ export function Sidebar() {
                             </div>
                             <span className={`ml-3 ${ifShow ? 'flex' : 'hidden'} lg:flex lg:flex-col align-baseline md:space-x-0 space-x-2`}>
                                 <span className="text-md whitespace-nowrap text-ellipsis overflow-hidden">{loggedUser.username}</span>
-                                <span className="text-sm text-gray-500 dark:text-gray-400">Баланс: {loggedUser.balance}₽</span>
+                                <span className="text-sm text-gray-500 dark:text-gray-400">Баланс: {userData?.balance}₽</span>
                             </span>
                         </span>
                     </Link>:
@@ -199,7 +204,7 @@ export function Sidebar() {
             </ul>
             {loggedUser &&
             <ul className="pt-4 mt-4 space-y-2 border-t border-gray-200 dark:border-gray-700">
-                <li onClick={() => {removeCookies('user'); setIfShow(false)}}>
+                <li onClick={() => {removeCookies('user'); setIfShow(false); addToast({type: "info", message: "Вы вышли из аккаунта", timeout: 3000})}}>
                     <span className="flex items-center p-2 text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
                         <svg className="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                             fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">

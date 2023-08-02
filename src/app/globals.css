@@ -57,3 +57,65 @@ body::-webkit-scrollbar {
         border-radius: 8px;
     }
 }
+
+.toast {
+    transform: translateX(500px);
+    display: hidden;
+    /* animation: slideInOut 4s ease .5s */
+}
+
+.slideIn {
+    animation: slideIn .5s ease
+}
+
+.stay {
+    transform: translateX(0px);
+}
+
+.slideOut {
+    animation: slideOut .5s ease
+}
+
+@keyframes progress {
+    0% {
+        display: block;
+        width: 100%;
+        opacity: 100%;
+    }
+    99% {
+        display: block;
+        width: 1%;
+        opacity: 100%;
+    }
+    100% {
+        display: hidden;
+        width: 1%;
+        opacity: 0;
+    }
+}
+
+@keyframes slideOut {
+    0% {
+        display: block;
+        transform: translateX(0);
+        opacity: 100%;
+    }
+    100% {
+        display: none;
+        transform: translateX(500px);
+        opacity: 0%;
+    }
+}
+
+@keyframes slideIn {
+    0% {
+        display: none;
+        transform: translateX(500px);
+        opacity: 0%;
+    }
+    100% {
+        display: block;
+        transform: translateX(0);
+        opacity: 100%;
+    }
+}

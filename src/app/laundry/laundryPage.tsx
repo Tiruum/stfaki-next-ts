@@ -11,6 +11,8 @@ import datetimeDiff from "@/helpers/datetimeDiff";
 import { ErrorAlert } from "@/components/ErrorAlert";
 import { useCookies } from "react-cookie";
 import { useAuthUser } from "@/hooks/useAuthUser";
+import { authApi } from "@/redux/services/authApi";
+import useToasts from "@/hooks/useToasts";
 
 export default function LaundryPage() {
 
@@ -22,21 +24,27 @@ export default function LaundryPage() {
             const dublicat = calendarData.find(function(entryByDay: LaundryEntry) {
                 return (entryByDay.wmInfo.value === entry.h) && (entryByDay.time === time)
             })
-            if (!!!dublicat && !!entry.h && datetimeDiff(selectedDate + 'T' + time.slice(0, 5)) > 0) {
-                await addLaundryEntry({
-                    userId: loggedUser.id,
-                    time: time,
-                    wmValue: entry.h,
-                    status: "booked",
-                    date: selectedDate,
-                })
+            if (!!!dublicat && !!entry.h && datetimeDiff(selectedDate + 'T' + time.slice(0, 5)) > 0 && !!userInfo) {
+                if (Number(userInfo?.balance) < Number(wms?.find((wm) => wm.value === entry.h)?.price)) {
+                    addToast({type: 'warning', message: "Недостаточно средств", timeout: 5000})
+                } else {
+                    await addLaundryEntry({
+                        userId: loggedUser.id,
+                        time: time,
+                        wmValue: entry.h,
+                        status: "booked",
+                        date: selectedDate,
+                    })
+                    changeUserInfo({...userInfo, balance: Number(userInfo?.balance) - Number(wms?.find((wm) => wm.value === entry.h)?.price)})
+                    addToast({type: 'success', message: "Запись создана", timeout: 3000})
+                }
             } else if (datetimeDiff(selectedDate + 'T' + time.slice(0, 5)) <= 0) {
-                alert("Запись на это время окончена")
+                addToast({type: 'warning', message: "Запись на это время окончена", timeout: 5000})
             } else {
-                alert("Такая запись уже существует")
+                addToast({type: 'error', message: "Такая запись уже существует", timeout: 5000})
             }
         } else {
-            alert("Вы не зарегистрированы")
+            addToast({type: 'error', message: "Вы не зарегистрированы", timeout: 5000})
         }
     }
 
@@ -45,11 +53,13 @@ export default function LaundryPage() {
             if ((entry.userId === loggedUser.id) && (datetimeDiff(entry.date + 'T' + entry.time.slice(0, 5)) > 0)) {
                 confirm(`Вы действительно хотите удалить запись в стиральную машину №${entry.wmInfo.value} на ${entry.time}?`)
                 await deleteLaundryEntry(entry.id)
+                changeUserInfo({...userInfo, balance: Number(userInfo?.balance) + Number(wms?.find((wm) => wm.value === entry.wmInfo.value)?.price)})
+                addToast({type: 'info', message: "Запись удалена", timeout: 3000})
             } else {
-                alert('Вы не можете удалить эту запись')
+                addToast({type: 'error', message: "Вы не можете удалить эту запись", timeout: 5000})
             }
         } else {
-            alert("Вы не зарегистрированы")
+            addToast({type: 'error', message: "Вы не зарегистрированы", timeout: 5000})
         }
     }
 
@@ -59,6 +69,10 @@ export default function LaundryPage() {
     const [addLaundryEntry, {}] = laundryEntriesApi.useAddLaundryEntryMutation() // Создание записи
     const [deleteLaundryEntry, {}] = laundryEntriesApi.useDeleteLaundryEntryMutation() // Удаление записи
     const {data: wms, isLoading: isLoadingWms, error: errorWms, isSuccess: isSuccessWms} = laundryEntriesApi.useGetWmsQuery()
+    const {addToast} = useToasts()
+
+    const {data: userInfo} = authApi.useGetUserInfoQuery(loggedUser?.id, { skip: !!!loggedUser?.id })
+    const [changeUserInfo, {}] = authApi.useChangeUserInfoMutation()
     return (
     <>
         <div className="mb-8">

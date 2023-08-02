@@ -2,7 +2,7 @@ export default function LoadingEventGrid() {
     return (
         <div className="max-w-full animate-pulse overflow-auto rounded-xl bg-gray-50 shadow-sm shadow-gray-200/50 dark:bg-gray-800 dark:shadow-black/50">
   <div className="overflow-hidden bg-white shadow-xl dark:bg-gray-800">
-    <div className="grid grid-cols-[70px,repeat(7,164px)] grid-rows-[auto,repeat(25,60px)] overflow-auto">
+    <div className="grid grid-cols-[70px,repeat(7,164px)] grid-rows-[auto,repeat(24,60px)] overflow-auto">
       <div className="sticky top-0 z-20 col-start-[1] row-start-[1] border-b border-gray-100 bg-white bg-clip-padding py-2 text-center text-sm font-medium text-white dark:border-black/10 dark:bg-gray-700 dark:text-gray-700">&lt; &gt;</div>
       <div className="sticky top-0 z-20 col-start-[2] row-start-[1] border-b border-gray-100 bg-white bg-clip-padding py-2 text-center text-sm font-medium text-gray-900 dark:border-black/10 dark:bg-gray-700 dark:text-gray-200"></div>
       <div className="sticky top-0 z-20 col-start-[3] row-start-[1] border-b border-gray-100 bg-white bg-clip-padding py-2 text-center text-sm font-medium text-gray-900 dark:border-black/10 dark:bg-gray-700 dark:text-gray-200"></div>
@@ -227,15 +227,6 @@ export default function LoadingEventGrid() {
       <div className="col-start-[6] row-start-[25] border-r border-gray-100 dark:border-gray-200/5"></div>
       <div className="col-start-[7] row-start-[25] border-r border-gray-100 dark:border-gray-200/5"></div>
       <div className="col-start-[8] row-start-[25]"></div>
-
-      <div className="sticky left-0 col-start-[1] row-start-[26] border-r border-gray-100 bg-white p-1.5 text-right text-xs font-medium uppercase text-gray-400 dark:border-gray-200/5 dark:bg-gray-800"><div className="ml-auto h-3 w-8 rounded-full bg-gray-100 dark:bg-gray-700"></div></div>
-      <div className="col-start-[2] row-start-[26] border-r border-gray-100 dark:border-gray-200/5"></div>
-      <div className="col-start-[3] row-start-[26] border-r border-gray-100 dark:border-gray-200/5"></div>
-      <div className="col-start-[4] row-start-[26] border-r border-gray-100 dark:border-gray-200/5"></div>
-      <div className="col-start-[5] row-start-[26] border-r border-gray-100 dark:border-gray-200/5"></div>
-      <div className="col-start-[6] row-start-[26] border-r border-gray-100 dark:border-gray-200/5"></div>
-      <div className="col-start-[7] row-start-[26] border-r border-gray-100 dark:border-gray-200/5"></div>
-      <div className="col-start-[8] row-start-[26]"></div>
 
       <div className="col-start-[3] row-span-6 row-start-[2] m-1 flex cursor-pointer flex-col space-y-1 overflow-auto rounded-lg border border-blue-700/10 bg-blue-400/20 p-1 transition-all dark:border-sky-500 dark:bg-sky-600/50">
         <span className="h-3 w-12 rounded-full bg-blue-700 dark:bg-sky-500"></span>

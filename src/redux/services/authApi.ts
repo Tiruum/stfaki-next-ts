@@ -29,6 +29,24 @@ export const authApi = createApi({
                 },
             }),
             invalidatesTags: ['User']
+        }),
+        getUserInfo: builder.query({
+            query: (id: number) => ({
+                url: `users/${id}`
+            }),
+            providesTags: result => ['User']
+        }),
+        changeUserInfo: builder.mutation({
+            query: (payload: {id: number}) => ({
+                url: `users/${payload.id}`,
+                method: 'PATCH',
+                body: payload,
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8',
+                    // 'Authorization': `Bearer ${payload.token}`,
+                },
+            }),
+            invalidatesTags: ['User']
         })
     })
 })
